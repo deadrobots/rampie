@@ -11,11 +11,13 @@ def upRamp():
     u.waitForButton()
     x.drive_speed(22, 100)
 
-    u.move_servo(2, 1400)
+    u.move_servo(c.servoBinArm, c.servoBinArmCaster)
+    u.move_servo(c.servoBinClaw, c.servoBinClawRamp)
+    u.move_servo(c.servoBinArm, c.servoBinArmStraight)
 
     msleep(3000)
     x.drive_speed(2, 75)
-    while gyro_x() < 200 and gyro_y() < 200:
+    while gyro_x() < 250 and gyro_y() < 250:
         if analog(0) > 1000:
             x._drive(60, 100)
         else:
@@ -23,14 +25,18 @@ def upRamp():
     print(gyro_x())
     print(gyro_y())
 
+    # x.freeze_motors()
+    #
+    # u.waitForButton()
+
     x.drive_speed(6, 100)
 
     # this is where it stops at the top
 
-    exit(0)
-
     msleep(2500)
-    set_servo_position(2, 1400)
+    #u.move_servo(c.servoBinClaw, c.servoBinClawDeliver)
+    set_servo_position(c.servoBinArm, c.servoBinArmDeliver)
+    x.linefollow_distance(23.46)
 
-    x.linefollow_distance(15)
-    x.drive_speed(20, -100)
+    u.DEBUGwithWait()
+

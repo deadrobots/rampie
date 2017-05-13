@@ -33,7 +33,7 @@ from wallaby import motor_power
 # Drive Constants
 INCHES_TO_TICKS = 199
 WHEEL_DISTANCE = 4.75 #205 - 4.25  # Distance between the two wheels
-ADJUST = 1 #0.96
+ADJUST = 1.01 #0.96
 
 from wallaby import digital
 

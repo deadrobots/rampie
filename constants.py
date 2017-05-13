@@ -1,6 +1,3 @@
-
-
-
 import wallaby as w
 
 # Time
@@ -15,13 +12,15 @@ LEFT_BUTTON = 0
 CLONE_SWITCH = 9
 RIGHT_BUTTON = 13
 
-#servos
+# servos
 servoBinArm = 2
 servoBinArmStraight = 1240
 servoBinArmDown = 776
 servoBinArmDeliver = 2047
 servoBinArmCaster = 755
 
+servoBinClawDeliver = 1100
+servoBinClawRamp = 530
 servoBinClaw = 0
 servoBinClawCaster = 0
 isClone = w.digital(CLONE_SWITCH)
