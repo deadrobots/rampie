@@ -13,14 +13,20 @@ CLONE_SWITCH = 9
 RIGHT_BUTTON = 13
 
 # servos
-servoBinArm = 2
-servoBinArmStraight = 1240
-servoBinArmDown = 776
-servoBinArmDeliver = 2047
-servoBinArmCaster = 755
 
-servoBinClawDeliver = 1100
-servoBinClawRamp = 530
 servoBinClaw = 0
-servoBinClawCaster = 0
+servoBinArm = 2
+
+
+# servo values
+
+binArmStraight = 850 #1240
+binArmDown = 776
+binArmDeliver = 2047
+binArmCaster = 755
+
+binClawDeliver = 1100
+binClawRamp = 530
+binClawCaster = 0
+
 isClone = w.digital(CLONE_SWITCH)
