@@ -19,11 +19,11 @@ servoBinArm = 2
 
 
 # servo values
-
+binArmIn = 190
 binArmStraight = 850 #1240
 binArmDown = 776
 binArmDeliver = 2047
-binArmCaster = 755
+binArmDrive = 755
 
 binClawDeliver = 1100
 binClawRamp = 530

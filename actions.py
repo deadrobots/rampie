@@ -3,6 +3,9 @@ import utils as u
 import motorsPlusPlus as x
 import constants as c
 
+def init():
+    u.move_servo(c.servoBinArm,c.binArmIn,10)
+    enable_servos()
 
 def upRamp():
     set_servo_position(c.servoBinArm, c.binArmStraight)
@@ -41,3 +44,45 @@ def upRamp():
 
     u.DEBUGwithWait()
 
+def find_black_line():
+    print "In one"
+    while not on_black_left() and not on_black_right():
+        print "while"
+        x._drive(60,60)
+    if on_black_left():
+        print "if"
+        x.drive_condition(-40, 25, on_black_right, False)
+    elif on_black_right():
+        print "elif"
+        x.drive_condition(25,-40, on_black_left, False)
+
+def driveTillBump():
+    x.rotate(-90, 50)
+    x.drive_speed(12, 100)
+    x.drive_condition(100,100, findBump)
+
+def findBump():
+    return gyro_y() < 200
+
+def on_black_right():
+    return analog(5) > 1000
+
+def on_black_left():
+    return analog(0) > 1000
+
+def Get_bin():
+    x.drive_speed(1,50)
+    x.pivot_left(45,50)
+    x.rotate(-50,50)
+    msleep(2000)
+
+def Go_to_ramp():
+    x.drive_speed(-3,50)
+    x.rotate(-95,50)
+    u.move_servo(c.servoBinArm, c.binArmDrive,10)
+    while not on_black_left() and not on_black_right():
+        x._drive(60,60)
+    if on_black_left():
+        x.drive_condition(-40, 25, on_black_right, False)
+    elif on_black_right():
+        x.drive_condition(25,-40, on_black_left, False)

@@ -3,10 +3,13 @@
 import actions as act
 
 def main():
-    act.upRamp()
-
-
-
+    print "Check"
+    act.init()
+    act.find_black_line()
+    act.driveTillBump()
+    act.Get_bin()
+    act.Go_to_ramp()
+    exit(0)
 
 if __name__ == "__main__":
     import os
