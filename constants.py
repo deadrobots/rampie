@@ -28,5 +28,6 @@ binArmDrive = 755
 binClawDeliver = 1100
 binClawRamp = 530
 binClawCaster = 0
+binUpRamp = 1225
 
 isClone = w.digital(CLONE_SWITCH)

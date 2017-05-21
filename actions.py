@@ -71,7 +71,7 @@ def on_black_left():
     return analog(0) > 1000
 
 def Get_bin():
-    x.drive_speed(1,50)
+    x.drive_speed(4,50)
     x.pivot_left(45,50)
     x.rotate(-50,50)
     msleep(2000)
@@ -86,3 +86,15 @@ def Go_to_ramp():
         x.drive_condition(-40, 25, on_black_right, False)
     elif on_black_right():
         x.drive_condition(25,-40, on_black_left, False)
+    x.drive_speed(6, 70)
+    u.move_servo(c.servoBinArm, c.binClawCaster,10)
+    x.rotate(-97, 50)
+    x.drive_speed(-3,60)
+    x.rotate(-93,50)
+    x.drive_speed(-15,60)
+    x.drive_speed(6,80)
+    x.rotate(95,50)
+    x.drive_speed(-20, 80)
+    u.move_servo(c.servoBinArm, c.binUpRamp)
+    x.drive_speed(5,50)
+    x.rotate(-91.5, 50)
