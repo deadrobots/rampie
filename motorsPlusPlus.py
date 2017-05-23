@@ -9,12 +9,12 @@ It requires boolean "isClone", integer "LMOTOR", and integer "RMOTOR" from a "co
 These values refer to prime/clone status, the left motor's port, and the right motor's port respectively.
 '''
 
-from constants import isClone
+from constants import IS_CLONE
 from constants import LMOTOR
 from constants import RMOTOR
 # from constants import LTOPHAT
 
-from utils import waitForButton
+from utils import wait_for_button
 
 from math import pi
 
@@ -37,7 +37,7 @@ ADJUST = 1.01 #0.96
 
 from wallaby import digital
 
-if isClone:
+if IS_CLONE:
     # Drive Constants
     INCHES_TO_TICKS = 165  # 169   #205 - 161     #156#127#50 cm #265
     WHEEL_DISTANCE = 4.25  # 205 - 4.25  # Distance between the two wheels
@@ -515,7 +515,7 @@ def change_adjust(x):
         ADJUST = .9685
     else:
         print("Resetting to old value")
-        if isClone:
+        if IS_CLONE:
             ADJUST = 0.98
         else:
             ADJUST = 1.08
@@ -637,7 +637,7 @@ def calibrate2(inches=24, speed=50):
         if i == 0:
             break
 
-        waitForButton()
+        wait_for_button()
 
 def calibrate3():
     AMOUNT = 6000
@@ -720,3 +720,7 @@ def linefollow_distance(distance):
             _drive(100, 80)
         else:
             _drive(80, 100)
+
+
+def drive_forever(left, right):
+    _drive(left, right)

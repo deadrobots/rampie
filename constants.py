@@ -14,20 +14,19 @@ RIGHT_BUTTON = 13
 
 # servos
 
-servoBinClaw = 0
-servoBinArm = 2
-
+SERVO_BIN_CLAW = 0
+SERVO_BIN_ARM = 2
 
 # servo values
-binArmIn = 190
-binArmStraight = 850 #1240
-binArmDown = 776
-binArmDeliver = 2047
-binArmDrive = 755
+BIN_ARM_IN = 190
+BIN_ARM_STRAIGHT = 850
+BIN_ARM_DOWN = 776
+BIN_ARM_DELIVER = 2047
+BIN_ARM_DRIVE = 755
 
-binClawDeliver = 1100
-binClawRamp = 530
-binClawCaster = 0
-binUpRamp = 1225
+BIN_CLAW_DELIVER = 1100
+BIN_CLAW_RAMP = 530
+BIN_CLAW_CASTER = 0
+BIN_UP_RAMP = 1225
 
-isClone = w.digital(CLONE_SWITCH)
+IS_CLONE = w.digital(CLONE_SWITCH)

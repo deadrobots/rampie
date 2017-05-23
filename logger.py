@@ -3,6 +3,7 @@ from time import strftime
 import constants as c
 from wallaby import seconds
 
+
 def log(message, filename="general.log"):
         datetime = strftime("%Y-%m-%d %H:%M:%S")
         dt = seconds() - c.startTime
@@ -11,6 +12,7 @@ def log(message, filename="general.log"):
         data = {'dt':dt, 'datetime':datetime}
         # print(str(data) + " " + message)
         logging.warning(message, extra=data)
+
 
 def data_log(message, filename="general.log"):
         dt = seconds() - c.startTime

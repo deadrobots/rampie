@@ -23,8 +23,9 @@ DELAY = 10
 # Loop break timers #
 time = 0  # This represents how long to wait before breaking a loop.
 
+
 #Causes the robot to stop until the right button is pressed
-def waitForButton():
+def wait_for_button():
     print "Press Button..."
     while not digital(c.RIGHT_BUTTON):
         pass
@@ -43,7 +44,7 @@ def DEBUG():
 
 
 #Causes the robot to stop and hold its position for 5 seconds
-def DEBUGwithWait():
+def DEBUG_WITH_WAIT():
     freeze(c.LMOTOR)
     freeze(c.RMOTOR)
     ao()
@@ -52,18 +53,13 @@ def DEBUGwithWait():
     exit(0)
 
 
-
-
-
 #Checks to see if all of the servos, motors, and sensors are working properly
 def start_up_test():
     DEBUG()
-
-
-
 # Servo Control #
-
 # Moves a servo with increment "speed".
+
+
 def move_servo(servo, endPos, speed=10):
     # speed of 1 is slow
     # speed of 2000 is fast
@@ -86,6 +82,8 @@ def move_servo(servo, endPos, speed=10):
     msleep(DELAY)
 
 # Moves a servo over a specific time.
+
+
 def move_servo_timed(servo, endPos, time):
     if time == 0:
         speed = 2047
@@ -95,21 +93,24 @@ def move_servo_timed(servo, endPos, time):
 
 
 # Sets wait time in seconds before breaking a loop.
-def setWait(DELAY):
+def set_wait(DELAY):
     global time
     time = seconds() + DELAY
 
 # Used to break a loop after using "setWait". An example would be: setWiat(10) | while true and getWait(): do something().
-def getWait():
+
+
+def get_wait():
     return seconds() < time
 
 
-def wait4light():
+def wait_4_light():
     while not calibrate(c.STARTLIGHT):
         pass
-    wait4(c.STARTLIGHT)
+    wait_4(c.STARTLIGHT)
 
 from wallaby import left_button, right_button
+
 
 def calibrate(port):
     print "Press LEFT button with light on"
@@ -143,7 +144,7 @@ def calibrate(port):
 
 
 
-def wait4(port):
+def wait_4(port):
     print "waiting for light!! "
     if c.seeding:
         print("SEEDING")
