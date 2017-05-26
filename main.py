@@ -9,7 +9,7 @@ def main():
     # act.test()
     # exit(0)
 
-    # act.test()
+    act.test()
 
     act.start()
     act.leave_startbox()

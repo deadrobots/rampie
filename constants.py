@@ -1,7 +1,7 @@
 import wallaby as w
 
 # Time
-startTime = -1
+startTime = w.seconds()
 
 # Motor ports
 LMOTOR = 0

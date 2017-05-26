@@ -15,6 +15,10 @@ def init():
 
 
 def test():
+
+    u.wait_for_button()
+    u.DEBUG()
+
     set_servo_position(c.joint, c.joint_mid)
     set_servo_position(c.arm, c.arm_down)
     enable_servos()
@@ -60,7 +64,7 @@ def find_black_line():
 
 
 def drive_till_bump():
-    x.drive_speed(12, 100, True)
+    x.drive_speed(40, 100, True)
     x.drive_condition(100, 100, find_bump)
 
 
@@ -97,7 +101,6 @@ def get_bin():
     u.move_servo(c.claw, c.claw_close)
     msleep(100)
     x.freeze_motors()
-    u.DEBUG_WITH_WAIT()
 
     x.drive_speed(-30, 99)
 
@@ -106,12 +109,15 @@ def get_bin():
     msleep(3000)
     x.drive_speed(10,100)
 
+
 def go_to_spinner():
     x.rotate(105, 30)
     x.drive_speed(-51, 100)
+    u.DEBUG()
     x.drive_speed(7,-100)
     x.pivot_right(100,100)
     x.drive_speed(35,-100)
+
 
 def go_to_ramp():
     x.drive_speed(-6,50)
