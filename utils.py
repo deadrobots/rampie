@@ -69,10 +69,8 @@ def move_servo(servo, endPos, speed=10):
         speed = 2047
     if endPos >= 2048:
         print "Programmer Error"
-        exit(0)
     if endPos < 0:
         print "Programmer Error"
-        exit(0)
     if now > endPos:
         speed = -speed
     for i in range(int(now), int(endPos), int(speed)):
@@ -143,7 +141,6 @@ def calibrate(port):
     return True
 
 
-
 def wait_4(port):
     print "waiting for light!! "
     if c.seeding:
@@ -152,3 +149,18 @@ def wait_4(port):
         print("HEAD TO HEAD")
     while analog(port) > c.startLightThresh:
         pass
+
+
+def move_bin(armEnd, speed=10): # 1263
+    joint_start = get_servo_position(c.joint) # 1750
+    arm_start = get_servo_position(c.arm) # 700
+    delta = armEnd - arm_start # 563
+    for shift in range(0, delta, speed):
+        set_servo_position(c.arm, arm_start + shift)
+        set_servo_position(c.joint, joint_start + shift)
+
+        print "{}\t{}".format(get_servo_position(c.joint), get_servo_position(c.arm))
+
+        msleep(DELAY)
+    set_servo_position(c.arm, arm_start + delta)
+    set_servo_position(c.joint, joint_start + delta)

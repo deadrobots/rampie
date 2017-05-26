@@ -4,12 +4,19 @@ import actions as act
 
 
 def main():
-    print "Check"
-    act.init()
-    act.find_black_line()
+    print "Checking"
+    # act.init()
+    # act.test()
+    # exit(0)
+
+    # act.test()
+
+    act.start()
+    act.leave_startbox()
     act.drive_till_bump()
     act.get_bin()
-    act.go_to_ramp()
+    act.go_to_spinner()
+    # act.go_to_ramp()
     exit(0)
 
 if __name__ == "__main__":
