@@ -15,6 +15,9 @@ def init():
 
 
 def test():
+    c.startTime = seconds()
+
+    print "NOTE: {}\t{}".format(seconds(), c.startTime)
 
     u.wait_for_button()
     u.DEBUG()
@@ -33,6 +36,8 @@ def test():
 
 
 def start():
+    c.startTime = seconds()
+    print "NOTE: {}\t{}".format(seconds(), c.startTime)
     enable_servos()
     u.move_servo(c.arm, c.arm_up)
     u.move_servo(c.joint, c.joint_tucked)
@@ -80,8 +85,58 @@ def on_black_left():
     return analog(0) > 1000
 
 
+def test_thingy():
+    # u.move_servo(c.arm, 500, 2047)
+    # u.move_servo(c.joint, 500)
+    #
+    # enable_servos()
+    #
+    # # x.drive_speed(5, 50)
+    # #
+    # # msleep(1000)
+    #
+    # u.move_servo(c.joint, 200, 5)
+    #
+    # msleep(500)
+    #
+    # u.move_bin(c.arm_all_up, 5)
+    #
+    # msleep(2000)
+    #
+    # exit(0)
+
+    u.move_servo(c.joint, 0)
+    enable_servo(0)
+
+    leave_startbox()
+    drive_till_bump()
+
+    x.drive_speed(4, 50)  # 4
+    x.pivot_left(45, 50)
+    x.rotate(-50, 50)
+    x.drive_speed(-8, 100)
+
+    u.wait_for_button()
+
+    u.move_servo(c.arm, 500)
+    u.move_servo(c.joint, 850)
+
+    enable_servos()
+
+    msleep(1000)
+
+    x.drive_speed(11, 30)
+
+    u.move_servo(c.joint, 300, 5)
+
+    x.drive_speed(-30, 100)
+
+    u.move_bin(c.arm_all_up)
+
+    msleep(3000)
+
 def get_bin():
-    x.drive_speed(3,50) # 4
+    x.drive_speed(4,50) # 4
     # u.move_servo(c.arm, c.arm_all_up)
     x.pivot_left(45,50)
     x.rotate(-50,50)
@@ -96,6 +151,9 @@ def get_bin():
     # x.drive_speed(3, 100)
     #
     # x.drive_speed(6, 50, True)
+
+    u.wait_for_button()
+
     x.drive_forever(30, 30)
     msleep(2000)
     u.move_servo(c.claw, c.claw_close)

@@ -160,8 +160,6 @@ def drive_speed(inches, speed, accel=False):  # Drives an exact distance in inch
         _clear_ticks()
 
     data_log("time\tmag_x\tmag_y\tmag_z\t\tgyr_x\tgyr_y\tgyr_z\tacc_x\tacc_y\tacc_z", "data.log")
-    import constants as c
-    c.startTime = seconds()
     while _right_ticks() <= ticks - remain:
 
         info = ("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d") % (seconds(), magneto_x(), magneto_y(), magneto_z(), gyro_x(), gyro_y(), gyro_z(), accel_x(), accel_y(), accel_z())

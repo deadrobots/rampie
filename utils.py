@@ -40,6 +40,7 @@ def DEBUG():
     freeze(c.RMOTOR)
     ao()
     print 'Program stop for DEBUG\nSeconds: ', seconds() - c.startTime
+    print "NOTE: {}\t{}".format(seconds(), c.startTime)
     exit(0)
 
 
