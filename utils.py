@@ -153,15 +153,15 @@ def wait_4(port):
 
 
 def move_bin(armEnd, speed=10): # 1263
-    joint_start = get_servo_position(c.joint) # 1750
-    arm_start = get_servo_position(c.arm) # 700
+    joint_start = get_servo_position(c.SERVO_JOINT) # 1750
+    arm_start = get_servo_position(c.SERVO_BIN_ARM) # 700
     delta = armEnd - arm_start # 563
     for shift in range(0, delta, speed):
-        set_servo_position(c.arm, arm_start + shift)
-        set_servo_position(c.joint, joint_start + shift)
+        set_servo_position(c.SERVO_BIN_ARM, arm_start + shift)
+        set_servo_position(c.SERVO_JOINT, joint_start + shift)
 
-        print "{}\t{}".format(get_servo_position(c.joint), get_servo_position(c.arm))
+        print "{}\t{}".format(get_servo_position(c.SERVO_JOINT), get_servo_position(c.SERVO_BIN_ARM))
 
         msleep(DELAY)
-    set_servo_position(c.arm, arm_start + delta)
-    set_servo_position(c.joint, joint_start + delta)
+    set_servo_position(c.SERVO_BIN_ARM, arm_start + delta)
+    set_servo_position(c.SERVO_JOINT, joint_start + delta)

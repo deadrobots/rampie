@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import actions as act
+from utils import DEBUG
 
 
 def main():
@@ -11,16 +12,14 @@ def main():
 
     # act.test()
 
-    act.test_thingy()
-    exit(0)
-
+    act.self_test()
     act.start()
     act.leave_startbox()
     act.drive_till_bump()
     act.get_bin()
     act.go_to_spinner()
     # act.go_to_ramp()
-    exit(0)
+    DEBUG()
 
 if __name__ == "__main__":
     import os

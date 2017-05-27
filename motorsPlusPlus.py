@@ -12,6 +12,7 @@ These values refer to prime/clone status, the left motor's port, and the right m
 from constants import IS_CLONE
 from constants import LMOTOR
 from constants import RMOTOR
+from constants import SPINNER
 # from constants import LTOPHAT
 
 from utils import wait_for_button
@@ -711,6 +712,7 @@ from wallaby import right_button, left_button
 #     print lAdjust
 #     msleep(500)
 
+
 def linefollow_distance(distance):
     _clear_ticks()
     while _right_ticks() < distance * INCHES_TO_TICKS:
@@ -722,3 +724,35 @@ def linefollow_distance(distance):
 
 def drive_forever(left, right):
     _drive(left, right)
+
+
+def rotate_spinner(rotations, speed):
+    full_rotation = 1400.0
+    clear_motor_position_counter(SPINNER)
+    motor_power(SPINNER, speed)
+    while abs(get_motor_position_counter(SPINNER)) < abs(full_rotation * rotations):
+        pass
+    print "rotated {} out of {}".format(get_motor_position_counter(SPINNER), abs(full_rotation * rotations))
+    freeze(SPINNER)
+
+
+def rotate_until_stalled(speed):
+    counter = 0
+    motor_power(SPINNER, speed)
+    previous = abs(get_motor_position_counter(SPINNER))
+    while counter < 10:
+        if abs(get_motor_position_counter(SPINNER)) == previous:
+            counter += 1
+        else:
+            counter = 0
+            previous = abs(get_motor_position_counter(SPINNER))
+        msleep(10)
+    freeze(SPINNER)
+
+
+def wait_for_someone_to_rotate():
+    print "please spin me"
+    clear_motor_position_counter(SPINNER)
+    while abs(get_motor_position_counter(SPINNER)) < 350:
+        pass
+    print "good job"
