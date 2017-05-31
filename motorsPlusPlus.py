@@ -751,7 +751,7 @@ def rotate_until_stalled(speed):
 
 
 def wait_for_someone_to_rotate():
-    print "please spin me"
+    print "please spin me back"
     clear_motor_position_counter(SPINNER)
     while abs(get_motor_position_counter(SPINNER)) < 350:
         pass

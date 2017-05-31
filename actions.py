@@ -55,6 +55,7 @@ def self_test():
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_SPINNER_TEST)
     x.wait_for_someone_to_rotate()
+    u.wait_for_button()
     x.rotate_until_stalled(20)
     msleep(500)
     x.rotate_spinner(.056, -100)
@@ -176,7 +177,6 @@ def test_thingy():
 
 def get_bin():
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
-    msleep(2000)
     x.drive_speed(3, 50)  # 4
     x.pivot_left(45, 50)
     x.rotate(-50, 50)
@@ -198,31 +198,66 @@ def get_bin():
     x.drive_speed(-30, 100)
 
 
+
 def go_to_spinner():
     u.move_servo(c.SERVO_BIN_ARM,c.ARM_TUCKED)
     x.drive_speed(6, 50)
     x.pivot_right(100, 50)
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
-    x.drive_speed(48, -100, True)
-    x.drive_speed(-8, 40)
-    x.drive_speed(3, 50)
-    u.wait_for_button()
-    x.rotate(-94, 50)
-    x.drive_speed(-13, 50)
-    x.drive_condition(80, 80, on_black_right, False)
-    x.drive_speed(4, 75)
-    u.wait_for_button()
-    x.pivot_right(93, 50)
-    x.drive_condition(80, 80, on_black_right, False)
-    x.drive_speed(5, 50)
-    u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE)
-    u.wait_for_button()
-    x.rotate(93, 50)
+    x.drive_speed(28, -100, True)
+    x.pivot_left(-42, 50)
+    x.drive_speed(-18, 60)
+    x.pivot_right(-35, 50)
+    x.drive_speed(-4, 50)
+
+    x.drive_condition(50, 50, on_black_right, False)
+    x.drive_condition(25, 25, on_black_right)
+    x.drive_speed(7, 50)
+    x.pivot_left_condition(-50, on_black_right, False)
+
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
     u.move_servo(c.SERVO_JOINT, c.JOINT_APPROACH)
-    disable_servos()
-    x.drive_speed(3, 30)
-    x.rotate_spinner(5, 50)
+
+    line_follow_untill_end_right()
+
     u.DEBUG_WITH_WAIT()
+
+
+def line_follow_untill_end_right():
+    while not on_black_left():
+        state = on_black_right()
+        if state:
+            x.drive_forever(50, 30)
+        else:
+            x.drive_forever(30, 50)
+        msleep(10)
+    while on_black_left():
+        state = on_black_right()
+        if state:
+            x.drive_forever(50, 30)
+        else:
+            x.drive_forever(30, 50)
+        msleep(10)
+    x.freeze_motors()
+        # x.drive_speed(-8, 40)
+    # x.drive_speed(3, 50)
+    # u.wait_for_button()
+    # x.rotate(-94, 50)
+    # x.drive_speed(-13, 50)
+    # x.drive_condition(80, 80, on_black_right, False)
+    # x.drive_speed(4, 75)
+    # u.wait_for_button()
+    # x.pivot_right(93, 50)
+    # x.drive_condition(80, 80, on_black_right, False)
+    # x.drive_speed(5, 50)
+    # u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE)
+    # u.wait_for_button()
+    # x.rotate(93, 50)
+    # u.move_servo(c.SERVO_JOINT, c.JOINT_APPROACH)
+    # disable_servos()
+    # x.drive_speed(3, 30)
+    # x.rotate_spinner(5, 50)
+    # u.DEBUG_WITH_WAIT()
 
 def go_to_ramp():
     x.drive_speed(-6,50)
