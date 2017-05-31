@@ -179,7 +179,7 @@ def get_bin():
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
     x.drive_speed(3, 50)  # 4
     x.pivot_left(45, 50)
-    x.rotate(-50, 50)
+    x.rotate(-52, 50)
     x.drive_speed(-8, 100)
 
     # u.wait_for_button()
@@ -219,6 +219,12 @@ def go_to_spinner():
     u.move_servo(c.SERVO_JOINT, c.JOINT_APPROACH)
 
     line_follow_untill_end_right()
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL)
+    x.drive_speed(3,50)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
+    x.rotate_spinner(6,75)
+
 
     u.DEBUG_WITH_WAIT()
 
