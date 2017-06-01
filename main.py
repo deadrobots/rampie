@@ -18,7 +18,9 @@ def main():
     act.drive_till_bump()
     act.get_bin()
     act.go_to_spinner()
-    # act.go_to_ramp()
+    act.go_to_ramp()
+    #act.up_ramp()
+
     DEBUG()
 
 if __name__ == "__main__":

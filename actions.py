@@ -180,7 +180,7 @@ def get_bin():
     x.drive_speed(3, 50)  # 4
     x.pivot_left(45, 50)
     x.rotate(-52, 50)
-    x.drive_speed(-8, 100)
+    x.drive_speed(-8, 100) #-8
 
     # u.wait_for_button()
 
@@ -223,11 +223,7 @@ def go_to_spinner():
     u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL)
     x.drive_speed(3,50)
     u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
-    x.rotate_spinner(6,75)
-
-
-    u.DEBUG_WITH_WAIT()
-
+    x.rotate_spinner(4,75)
 
 def line_follow_untill_end_right():
     while not on_black_left():
@@ -266,31 +262,16 @@ def line_follow_untill_end_right():
     # u.DEBUG_WITH_WAIT()
 
 def go_to_ramp():
-    x.drive_speed(-6,50)
-    x.rotate(-95,50)
-    u.move_servo(c.SERVO_BIN_ARM, c.BIN_ARM_DRIVE, 10)
-    while not on_black_left() and not on_black_right():
-        x.drive_forever(60,60)
-    if on_black_left():
-        x.drive_condition(-40, 25, on_black_right, False)
-    elif on_black_right():
-        x.drive_condition(25,-40, on_black_left, False)
-    x.drive_speed(6, 70)
-    u.move_servo(c.SERVO_BIN_ARM, c.BIN_CLAW_CASTER, 10)
-    x.rotate(-97, 50)
-    x.drive_speed(-3,60)
-    x.rotate(-93,50)
-    x.drive_speed(-15,60)
-    x.drive_speed(6,80)
-    x.rotate(95,50)
-    x.drive_speed(-20, 80)
-    u.move_servo(c.SERVO_BIN_ARM, c.BIN_UP_RAMP)
-    x.drive_speed(5,50)
-    x.rotate(-91.5, 50)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE)
+    x._drive(-50,-90)
+    msleep(3000)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
+    x.drive_speed(-5,100)
 
+    u.DEBUG_WITH_WAIT()
 
 def up_ramp():
-    set_servo_position(c.SERVO_BIN_ARM, c.BIN_ARM_STRAIGHT)
+    set_servo_position(c.SERVO_JOINT, c.JOINT_HOLD)
     enable_servos()
     u.wait_for_button()
     x.drive_speed(22, 100)
@@ -305,3 +286,4 @@ def up_ramp():
     print(gyro_x())
     print(gyro_y())
     x.drive_speed(6, 100)
+
