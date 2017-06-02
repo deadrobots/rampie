@@ -19,7 +19,7 @@ def main():
     act.get_bin()
     act.go_to_spinner()
     act.go_to_ramp()
-    #act.up_ramp()
+    act.go_up_ramp()
 
     DEBUG()
 

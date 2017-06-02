@@ -42,7 +42,9 @@ def self_test():
     # x.rotate_spinner(1, -50)
     # exit(0)
 
-
+    if on_black_left() or on_black_right():
+        print "Something is wrong with the tophats!"
+        print "LTOPHAT: {}\tRTOPHAT: {}".format(on_black_left(), on_black_right())
     while not found_bump():
         pass
     print ("Good gyro")
@@ -191,7 +193,7 @@ def get_bin():
 
     msleep(1000)
 
-    x.drive_speed(12, 30)
+    x.drive_speed(13, 30)
 
     u.move_servo(c.SERVO_JOINT, c.JOINT_HOLD, 5)
 
@@ -208,7 +210,7 @@ def go_to_spinner():
     x.pivot_left(-42, 50)
     x.drive_speed(-18, 60)
     x.pivot_right(-35, 50)
-    x.drive_speed(-4, 50)
+    x.drive_speed(-6, 50)
 
     x.drive_condition(50, 50, on_black_right, False)
     x.drive_condition(25, 25, on_black_right)
@@ -263,27 +265,37 @@ def line_follow_untill_end_right():
 
 def go_to_ramp():
     u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE)
-    x._drive(-50,-90)
+    x._drive(-53,-90)
     msleep(3000)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
     x.drive_speed(-5,100)
+    x.pivot_right(-20, 50)
+    x.drive_speed(-6, 100)
 
-    u.DEBUG_WITH_WAIT()
 
-def up_ramp():
-    set_servo_position(c.SERVO_JOINT, c.JOINT_HOLD)
-    enable_servos()
-    u.wait_for_button()
-    x.drive_speed(22, 100)
-    msleep(3000)
-    x.drive_speed(2, 75)
+    #u.DEBUG_WITH_WAIT()
+
+def go_up_ramp():
+    u.move_servo(c.SERVO_JOINT, c.JOINT_RAMP_APPROACH)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_RAMP_APPROACH)
+    msleep(500)
+    x.drive_speed(8, 100)
+    msleep(500)
+    x.drive_speed(8, 100)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_RAMP_ON)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_RAMP_ON)
+    msleep(500)
+
     while gyro_y() > -350 and gyro_y() > -350:
         print(gyro_y())
         if analog(0) < 1000:
-            x.drive_forever(60, 100)
+            x.drive_forever(80, 100)
         else:
-            x.drive_forever(100, 80)
+            x.drive_forever(100, 60)
     print(gyro_x())
     print(gyro_y())
+
+
     x.drive_speed(6, 100)
+    u.DEBUG()
 
