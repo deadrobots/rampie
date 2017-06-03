@@ -82,7 +82,6 @@ def move_servo(servo, endPos, speed=10):
 
 # Moves a servo over a specific time.
 
-
 def move_servo_timed(servo, endPos, time):
     if time == 0:
         speed = 2047
@@ -90,6 +89,22 @@ def move_servo_timed(servo, endPos, time):
         speed = abs((DELAY * (get_servo_position(servo) - endPos)) / time)
     move_servo(servo, endPos, speed)
 
+
+def move_two_servos_timed(servo1, endPos1, servo2, endPos2, time):
+    if time == 0:
+        speed = 2047
+    else:
+        delta1 = endPos1 - get_servo_position(servo1)
+        delta2 = endPos2 - get_servo_position(servo2)
+        speed1 = (DELAY * delta1) / time
+        speed2 = (DELAY * delta2) / time
+        moves = delta1 / speed1
+        for x in range(1, abs(int(moves))):
+            set_servo_position(servo1, get_servo_position(servo1) + speed1 * x)
+            set_servo_position(servo2, get_servo_position(servo2) + speed2 * x)
+            msleep(DELAY)
+        set_servo_position(servo1, endPos1)
+        set_servo_position(servo2, endPos2)
 
 # Sets wait time in seconds before breaking a loop.
 def set_wait(DELAY):

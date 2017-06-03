@@ -15,11 +15,54 @@ def init():
 
 
 def test():
+
+
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_HOLD)
+    enable_servos()
+    u.wait_for_button()
+
+    u.move_bin(c.ARM_ALL_UP)
+
+    msleep(5000)
+    exit(0)
+    x.drive_forever(-50, 50)
+    for yy in range(0, 3):
+        while gyro_y() < 150:
+            pass
+        msleep(5)
+    x.freeze_motors()
+    exit(0)
+
+    for y in range(0, 500, 50):
+        print("\n\nTESTING: {}\n".format(x))
+        while right_button():
+            pass
+        while not right_button():
+            g_y = gyro_y()
+            if g_y > y:
+                print("GREATER: {} > {}".format(g_y, y))
+    exit(0)
+
+
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH, 2047)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_APPROACH, 2047)
+
+    enable_servos()
+
     c.startTime = seconds()
 
     print "NOTE: {}\t{}".format(seconds(), c.startTime)
 
     u.wait_for_button()
+
+    msleep(1000)
+
+    u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
+    u.move_bin(c.ARM_SWING)
+
+    msleep(5000)
+
     u.DEBUG()
 
     set_servo_position(c.SERVO_JOINT, c.JOINT_MID)
@@ -54,13 +97,14 @@ def self_test():
     while not on_black_left() or not on_black_right():
         pass
     x.freeze_motors()
-    u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
+    # u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_MID)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_SPINNER_TEST)
     x.wait_for_someone_to_rotate()
     u.wait_for_button()
     x.rotate_until_stalled(20)
     msleep(500)
-    x.rotate_spinner(.056, -100)
+    x.rotate_spinner(.056, -30)
     msleep(500)
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
@@ -112,7 +156,8 @@ def drive_till_bump():
     u.move_servo(c.SERVO_JOINT,c.JOINT_MID)
     x.drive_speed(25, 100)
     x.drive_condition(100, 100, found_bump, False)
-    u.move_servo(c.SERVO_BIN_ARM, c.ARM_ALL_UP)
+    # u.move_servo(c.SERVO_BIN_ARM, c.ARM_ALL_UP)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
 
 def found_bump():
     return gyro_y() > 200
@@ -162,8 +207,6 @@ def test_thingy():
     u.move_servo(c.SERVO_BIN_ARM, 500)
     u.move_servo(c.SERVO_JOINT, 850)
 
-    enable_servos()
-
     msleep(1000)
 
     x.drive_speed(12, 30)
@@ -178,32 +221,35 @@ def test_thingy():
 
 
 def get_bin():
-    u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED, 100)
     x.drive_speed(3, 50)  # 4
     x.pivot_left(45, 50)
     x.rotate(-52, 50)
     x.drive_speed(-8, 100) #-8
 
-    # u.wait_for_button()
-
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
     u.move_servo(c.SERVO_JOINT, c.JOINT_APPROACH)
 
-    enable_servos()
+    # enable_servos()
 
-    msleep(1000)
+    msleep(500)
 
     x.drive_speed(13, 30)
 
-    u.move_servo(c.SERVO_JOINT, c.JOINT_HOLD, 5)
+    # u.move_two_servos_timed(c.SERVO_JOINT, c.JOINT_HOLD, c.SERVO_BIN_ARM, c.ARM_SWING, 1000)
 
+    u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
+    u.move_bin(c.ARM_SWING, 5)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL)
+
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_HOLD)
     x.drive_speed(-30, 100)
-
-
+    u.wait_for_button()
 
 def go_to_spinner():
-    u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
-    u.move_servo(c.SERVO_BIN_ARM,c.ARM_TUCKED)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
     x.drive_speed(10, 50)
     x.pivot_left(-100, 50)
     x.drive_speed(22, -100, True)
@@ -222,9 +268,13 @@ def go_to_spinner():
     line_follow_untill_end_right()
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
     u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL)
+
+    x.rotate_spinner(.25, -80)
+
     x.drive_speed(3,50)
     u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
     x.rotate_spinner(4,75)
+    x.rotate_to_safe()
 
 def line_follow_untill_end_right():
     while not on_black_left():
@@ -271,7 +321,7 @@ def go_to_ramp():
     x.drive_speed(-5,100)
     x.pivot_right(-20, 50)
     x.drive_speed(-8, 100)
-
+    u.wait_for_button()
 
     #u.DEBUG_WITH_WAIT()
 
@@ -292,18 +342,26 @@ def go_up_ramp():
     #TODO:
     #Fix line follow. Tophat might be too high when the robot raises up too high
     #Gyro value might need adjusting
+    x.drive_speed(8, 100)
     startTime = seconds()
-    while gyro_y() > -350:
-        print(gyro_y())
+
+    count = 0
+
+    while count < 25:
+        print(accel_z())
         if seconds()-startTime > 5:
             disable_servos()
+
+        if accel_z() > -800:
+            count = 0
+        else:
+            count += 1
         if on_black_right():
             x.drive_forever(100, 80)
         else:
             x.drive_forever(80, 100)
+        msleep(10)
     enable_servos()
-    print(gyro_x())
-    print(gyro_y())
 
     #x.drive_speed(6, 100)
     u.DEBUG()

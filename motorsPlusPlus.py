@@ -34,7 +34,7 @@ from wallaby import motor_power
 # Drive Constants
 INCHES_TO_TICKS = 199
 WHEEL_DISTANCE = 7.4 #205 - 4.25  # Distance between the two wheels
-ADJUST = 1.01 #0.96    #1.01
+ADJUST = 1.0 #0.96    #1.01
 
 from wallaby import digital
 
@@ -728,9 +728,9 @@ def drive_forever(left, right):
 
 def rotate_spinner(rotations, speed):
     full_rotation = 1400.0
-    clear_motor_position_counter(SPINNER)
+    start = get_motor_position_counter(SPINNER)
     motor_power(SPINNER, speed)
-    while abs(get_motor_position_counter(SPINNER)) < abs(full_rotation * rotations):
+    while abs(get_motor_position_counter(SPINNER) - start) < abs(full_rotation * rotations):
         pass
     print "rotated {} out of {}".format(get_motor_position_counter(SPINNER), abs(full_rotation * rotations))
     freeze(SPINNER)
@@ -748,6 +748,7 @@ def rotate_until_stalled(speed):
             previous = abs(get_motor_position_counter(SPINNER))
         msleep(10)
     freeze(SPINNER)
+    clear_motor_position_counter(SPINNER)
 
 
 def wait_for_someone_to_rotate():
@@ -756,3 +757,11 @@ def wait_for_someone_to_rotate():
     while abs(get_motor_position_counter(SPINNER)) < 350:
         pass
     print "good job"
+
+
+def rotate_to_safe():
+    full_rotation = 1400.0
+    motor_power(SPINNER, -60)
+    while abs(get_motor_position_counter(SPINNER) % full_rotation) > 100:
+        pass
+    freeze(SPINNER)
