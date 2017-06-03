@@ -119,11 +119,11 @@ def found_bump():
 
 
 def on_black_right():
-    return analog(5) > 1000
+    return analog(c.RIGHT_TOPHAT) > 1000
 
 
 def on_black_left():
-    return analog(0) > 1000
+    return analog(c.LEFT_TOPHAT) > 1000
 
 
 def test_thingy():
@@ -202,16 +202,15 @@ def get_bin():
 
 
 def go_to_spinner():
-    u.move_servo(c.SERVO_BIN_ARM,c.ARM_TUCKED)
-    x.drive_speed(6, 50)
-    x.pivot_right(100, 50)
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
-    x.drive_speed(28, -100, True)
+    u.move_servo(c.SERVO_BIN_ARM,c.ARM_TUCKED)
+    x.drive_speed(10, 50)
+    x.pivot_left(-100, 50)
+    x.drive_speed(22, -100, True)
     x.pivot_left(-42, 50)
     x.drive_speed(-18, 60)
     x.pivot_right(-35, 50)
     x.drive_speed(-6, 50)
-
     x.drive_condition(50, 50, on_black_right, False)
     x.drive_condition(25, 25, on_black_right)
     x.drive_speed(7, 50)
@@ -264,38 +263,48 @@ def line_follow_untill_end_right():
     # u.DEBUG_WITH_WAIT()
 
 def go_to_ramp():
+    print("Start of goToRamp")
     u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE)
     x._drive(-53,-90)
     msleep(3000)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
     x.drive_speed(-5,100)
     x.pivot_right(-20, 50)
-    x.drive_speed(-6, 100)
+    x.drive_speed(-8, 100)
 
 
     #u.DEBUG_WITH_WAIT()
 
 def go_up_ramp():
+    print("Start of goUpRamp")
     u.move_servo(c.SERVO_JOINT, c.JOINT_RAMP_APPROACH)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_RAMP_APPROACH)
     msleep(500)
     x.drive_speed(8, 100)
     msleep(500)
     x.drive_speed(8, 100)
-    u.move_servo(c.SERVO_JOINT, c.JOINT_RAMP_ON)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_RAMP_APPROACH)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_RAMP_ON)
     msleep(500)
-
-    while gyro_y() > -350 and gyro_y() > -350:
+    #Line follows using right tophat until gyro y detects that were on the top of the hill
+    #Disables servos after 5 seconds so that the servo arm doesnt
+    #oscillate the robot causing the gyro to trigger early
+    #TODO:
+    #Fix line follow. Tophat might be too high when the robot raises up too high
+    #Gyro value might need adjusting
+    startTime = seconds()
+    while gyro_y() > -350:
         print(gyro_y())
-        if analog(0) < 1000:
-            x.drive_forever(80, 100)
+        if seconds()-startTime > 5:
+            disable_servos()
+        if on_black_right():
+            x.drive_forever(100, 80)
         else:
-            x.drive_forever(100, 60)
+            x.drive_forever(80, 100)
+    enable_servos()
     print(gyro_x())
     print(gyro_y())
 
-
-    x.drive_speed(6, 100)
+    #x.drive_speed(6, 100)
     u.DEBUG()
 

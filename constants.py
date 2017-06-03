@@ -13,6 +13,10 @@ LEFT_BUTTON = 0
 CLONE_SWITCH = 9
 RIGHT_BUTTON = 13
 
+#Analog ports
+RIGHT_TOPHAT = 5
+LEFT_TOPHAT = 0
+
 IS_CLONE = w.digital(CLONE_SWITCH)
 
 # Servos
