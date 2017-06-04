@@ -1,17 +1,11 @@
 #!/usr/bin/python
 
 import actions as act
-from utils import DEBUG
-
+from utils import shutdown
+from logger import log as display
 
 def main():
-    print "Checking"
-    # act.init()
-    # act.test()
-    # exit(0)
-
-    # act.test()
-
+    display("Checking")
     act.self_test()
     act.start()
     act.leave_startbox()
@@ -20,8 +14,8 @@ def main():
     act.go_to_spinner()
     act.go_to_ramp()
     act.go_up_ramp()
+    shutdown()
 
-    DEBUG()
 
 if __name__ == "__main__":
     import os

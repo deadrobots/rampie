@@ -19,6 +19,7 @@ from utils import wait_for_button
 
 from math import pi
 
+from wallaby import digital
 from wallaby import ao
 from wallaby import clear_motor_position_counter
 from wallaby import freeze
@@ -30,19 +31,22 @@ from wallaby import analog
 from wallaby import accel_x
 from wallaby import motor_power as motor
 from wallaby import motor_power
+from wallaby import magneto_x, magneto_y, magneto_z, accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z
+
+from logger import data_log
+
 
 # Drive Constants
 INCHES_TO_TICKS = 199
 WHEEL_DISTANCE = 7.4 #205 - 4.25  # Distance between the two wheels
 ADJUST = 1.0 #0.96    #1.01
 
-from wallaby import digital
 
 if IS_CLONE:
     # Drive Constants
-    INCHES_TO_TICKS = 165  # 169   #205 - 161     #156#127#50 cm #265
-    WHEEL_DISTANCE = 4.25  # 205 - 4.25  # Distance between the two wheels
-    ADJUST = 1  # adjust left wheel counter to fix drift
+    INCHES_TO_TICKS = 199  # 169   #205 - 161     #156#127#50 cm #265
+    WHEEL_DISTANCE = 7.4  # 205 - 4.25  # Distance between the two wheels
+    ADJUST = .99  # adjust left wheel counter to fix drift
 
 
 # Motor Control #
@@ -130,8 +134,6 @@ def arc_radius(angle, turnRadius, speed):  # Turns the robot "angle" degrees by 
     print get_motor_position_counter(RMOTOR)
 
 
-from logger import data_log
-from wallaby import magneto_x, magneto_y, magneto_z, accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z
 
 def drive_speed(inches, speed, accel=False):  # Drives an exact distance in inches.
     print "driving exact distance"
@@ -337,8 +339,8 @@ def drive_timed(lmotor, rmotor, time):
 print get_motor_position_counter(RMOTOR)
 
 
-def drive_condition(lmotor, rmotor, testFunction,
-                    state=True):  # Drives while "testFunction" returns "state" | an example would be: x.drive_condition(50, 50, x.getWait)
+def drive_condition(lmotor, rmotor, testFunction, state=True):
+# Drives while "testFunction" returns "state" | an example would be: x.drive_condition(50, 50, x.getWait)
     print "driving under condition"
     _clear_ticks()
     if lmotor == 0 or rmotor == 0:
@@ -761,7 +763,11 @@ def wait_for_someone_to_rotate():
 
 def rotate_to_safe():
     full_rotation = 1400.0
-    motor_power(SPINNER, -60)
-    while abs(get_motor_position_counter(SPINNER) % full_rotation) > 100:
+    motor_power(SPINNER, -50)
+    while abs(get_motor_position_counter(SPINNER)) % full_rotation > 50:
         pass
     freeze(SPINNER)
+
+
+def set_spinner_safe():
+    clear_motor_position_counter(SPINNER)

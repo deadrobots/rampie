@@ -17,6 +17,9 @@ from wallaby import freeze
 from wallaby import set_servo_position
 from wallaby import get_servo_position
 from wallaby import analog
+from wallaby import gyro_y
+
+from logger import log as display
 
 # Servo Constants
 DELAY = 10
@@ -26,11 +29,11 @@ time = 0  # This represents how long to wait before breaking a loop.
 
 #Causes the robot to stop until the right button is pressed
 def wait_for_button():
-    print "Press Button..."
+    display ("Press Button...")
     while not digital(c.RIGHT_BUTTON):
         pass
     msleep(1)
-    print "Pressed"
+    display ("Pressed")
     msleep(1000)
 
 
@@ -39,8 +42,8 @@ def DEBUG():
     freeze(c.LMOTOR)
     freeze(c.RMOTOR)
     ao()
-    print 'Program stop for DEBUG\nSeconds: ', seconds() - c.startTime
-    print "NOTE: {}\t{}".format(seconds(), c.startTime)
+    display ('Program stop for DEBUG\nSeconds: {}'.format(seconds() - c.startTime))
+    display ("NOTE: {}\t{}".format(seconds(), c.startTime))
     exit(0)
 
 
@@ -50,7 +53,7 @@ def DEBUG_WITH_WAIT():
     freeze(c.RMOTOR)
     ao()
     msleep(5000)
-    print 'Program stop for DEBUG\nSeconds: ', seconds() - c.startTime
+    display ('Program stop for DEBUG\nSeconds: {}'.format(seconds() - c.startTime))
     exit(0)
 
 
@@ -69,9 +72,9 @@ def move_servo(servo, endPos, speed=10):
     if speed == 0:
         speed = 2047
     if endPos >= 2048:
-        print "Programmer Error"
+        display ("Programmer Error")
     if endPos < 0:
-        print "Programmer Error"
+        display ("Programmer Error")
     if now > endPos:
         speed = -speed
     for i in range(int(now), int(endPos), int(speed)):
@@ -127,42 +130,42 @@ from wallaby import left_button, right_button
 
 
 def calibrate(port):
-    print "Press LEFT button with light on"
+    display ("Press LEFT button with light on")
     while not left_button():
         pass
     while left_button():
         pass
     lightOn = analog(port)
-    print "On value =", lightOn
+    display ("On value =", lightOn)
     if lightOn > 200:
-        print "Bad calibration"
+        display ("Bad calibration")
         return False
     msleep(1000)
-    print "Press RIGHT button with light off"
+    display ("Press RIGHT button with light off")
     while not right_button():
         pass
     while right_button():
         pass
     lightOff = analog(port)
-    print "Off value =", lightOff
+    display ("Off value =", lightOff)
     if lightOff < 3000:
-        print "Bad calibration"
+        display ("Bad calibration")
         return False
 
     if (lightOff - lightOn) < 2000:
-        print "Bad calibration"
+        display ("Bad calibration")
         return False
     c.startLightThresh = (lightOff - lightOn) / 2
-    print "Good calibration! ", c.startLightThresh
+    display ("Good calibration! ", c.startLightThresh)
     return True
 
 
 def wait_4(port):
-    print "waiting for light!! "
+    display ("waiting for light!! ")
     if c.seeding:
-        print("SEEDING")
+        display("SEEDING")
     else:
-        print("HEAD TO HEAD")
+        display("HEAD TO HEAD")
     while analog(port) > c.startLightThresh:
         pass
 
@@ -175,8 +178,27 @@ def move_bin(armEnd, speed=10): # 1263
         set_servo_position(c.SERVO_BIN_ARM, arm_start + shift)
         set_servo_position(c.SERVO_JOINT, joint_start + shift)
 
-        print "{}\t{}".format(get_servo_position(c.SERVO_JOINT), get_servo_position(c.SERVO_BIN_ARM))
+        display ("{}\t{}".format(get_servo_position(c.SERVO_JOINT), get_servo_position(c.SERVO_BIN_ARM)))
 
         msleep(DELAY)
     set_servo_position(c.SERVO_BIN_ARM, arm_start + delta)
     set_servo_position(c.SERVO_JOINT, joint_start + delta)
+
+def shutdown():
+    freeze(c.LMOTOR)
+    freeze(c.RMOTOR)
+    ao()
+    display ('Program stopped\nSeconds: {}'.format(seconds() - c.startTime))
+    exit(0)
+
+
+def found_bump():
+    return gyro_y() > c.THRESHOLD_GYRO
+
+
+def on_black_right():
+    return analog(c.RIGHT_TOPHAT) > c.THRESHOLD_TOPHAT
+
+
+def on_black_left():
+    return analog(c.LEFT_TOPHAT) > c.THRESHOLD_TOPHAT
