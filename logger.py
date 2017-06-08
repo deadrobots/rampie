@@ -16,7 +16,7 @@ def log(message):
         os.system("mkdir -p '{}'/logs/{}".format(path, c.ROBOT_NAME))
         c.LOGFILE = "{}/logs/{}/{}".format(path, c.ROBOT_NAME, name)
         open(c.LOGFILE, "w").close()
-    dt = seconds() - c.startTime
+    dt = "{:.3f}".format(seconds() - c.startTime)
     FORMAT = '%(datetime)s %(dt)s: %(message)s'
     logging.basicConfig(filename=c.LOGFILE, format=FORMAT)
     data = {'dt': dt, 'datetime': datetime}

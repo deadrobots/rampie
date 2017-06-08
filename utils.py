@@ -71,10 +71,12 @@ def move_servo(servo, endPos, speed=10):
     now = get_servo_position(servo)
     if speed == 0:
         speed = 2047
-    if endPos >= 2048:
-        display ("Programmer Error")
-    if endPos < 0:
-        display ("Programmer Error")
+    if endPos > 2040:
+        display("using 2040")
+        endPos = 2040
+    if endPos < 5:
+        display("using 5")
+        endPos = 5
     if now > endPos:
         speed = -speed
     for i in range(int(now), int(endPos), int(speed)):
@@ -170,19 +172,36 @@ def wait_4(port):
         pass
 
 
-def move_bin(armEnd, speed=10): # 1263
+def move_bin(armIn, speed=10): # 1263
+    if armIn < 5:
+        armEnd = 5
+    elif armIn > 2040:
+        armEnd = 2040
+    else:
+        armEnd = armIn
+
     joint_start = get_servo_position(c.SERVO_JOINT) # 1750
     arm_start = get_servo_position(c.SERVO_BIN_ARM) # 700
     delta = armEnd - arm_start # 563
     for shift in range(0, delta, speed):
         set_servo_position(c.SERVO_BIN_ARM, arm_start + shift)
-        set_servo_position(c.SERVO_JOINT, joint_start + shift)
+        set_joint = joint_start + shift
+        if set_joint > 1900:
+            set_joint = 1900
+        elif set_joint < 5:
+            set_joint = 5
+        set_servo_position(c.SERVO_JOINT, set_joint)
 
         display ("{}\t{}".format(get_servo_position(c.SERVO_JOINT), get_servo_position(c.SERVO_BIN_ARM)))
 
         msleep(DELAY)
+    set_joint = joint_start + delta
+    if set_joint > 1900:
+        set_joint = 1900
+    elif set_joint < 5:
+        set_joint = 5
     set_servo_position(c.SERVO_BIN_ARM, arm_start + delta)
-    set_servo_position(c.SERVO_JOINT, joint_start + delta)
+    set_servo_position(c.SERVO_JOINT, set_joint)
 
 def shutdown():
     freeze(c.LMOTOR)
@@ -193,12 +212,12 @@ def shutdown():
 
 
 def found_bump():
-    return gyro_y() > c.THRESHOLD_GYRO
+    return gyro_y() < -c.THRESHOLD_GYRO
 
 
-def on_black_right():
-    return analog(c.RIGHT_TOPHAT) > c.THRESHOLD_TOPHAT
+def on_black_back():
+    return analog(c.BACK_TOPHAT) > c.THRESHOLD_TOPHAT
 
 
-def on_black_left():
-    return analog(c.LEFT_TOPHAT) > c.THRESHOLD_TOPHAT
+def on_black_front():
+    return analog(c.FRONT_TOPHAT) > c.THRESHOLD_TOPHAT

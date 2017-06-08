@@ -16,7 +16,6 @@ def main():
     act.go_up_ramp()
     shutdown()
 
-
 if __name__ == "__main__":
     import os
     import sys

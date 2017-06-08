@@ -13,6 +13,7 @@ from constants import IS_CLONE
 from constants import LMOTOR
 from constants import RMOTOR
 from constants import SPINNER
+from constants import THRESHOLD_TOPHAT
 # from constants import LTOPHAT
 
 from utils import wait_for_button
@@ -32,8 +33,10 @@ from wallaby import accel_x
 from wallaby import motor_power as motor
 from wallaby import motor_power
 from wallaby import magneto_x, magneto_y, magneto_z, accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z
+from logger import log as display
+from utils import on_black_front
 
-from logger import data_log
+# from logger import data_log
 
 
 # Drive Constants
@@ -44,9 +47,9 @@ ADJUST = 1.0 #0.96    #1.01
 
 if IS_CLONE:
     # Drive Constants
-    INCHES_TO_TICKS = 199  # 169   #205 - 161     #156#127#50 cm #265
+    INCHES_TO_TICKS = 215  # 169   #205 - 161     #156#127#50 cm #265
     WHEEL_DISTANCE = 7.4  # 205 - 4.25  # Distance between the two wheels
-    ADJUST = .99  # adjust left wheel counter to fix drift
+    ADJUST = 1.06  # adjust left wheel counter to fix drift
 
 
 # Motor Control #
@@ -162,11 +165,11 @@ def drive_speed(inches, speed, accel=False):  # Drives an exact distance in inch
         remain = int((_left_ticks() + _right_ticks()) / 2)
         _clear_ticks()
 
-    data_log("time\tmag_x\tmag_y\tmag_z\t\tgyr_x\tgyr_y\tgyr_z\tacc_x\tacc_y\tacc_z", "data.log")
+    # data_log("time\tmag_x\tmag_y\tmag_z\t\tgyr_x\tgyr_y\tgyr_z\tacc_x\tacc_y\tacc_z", "data.log")
     while _right_ticks() <= ticks - remain:
 
         info = ("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d") % (seconds(), magneto_x(), magneto_y(), magneto_z(), gyro_x(), gyro_y(), gyro_z(), accel_x(), accel_y(), accel_z())
-        data_log(info, "data.log")
+        # data_log(info, "data.log")
         # print "info " + info
 
         left = _left_ticks()
@@ -715,13 +718,14 @@ from wallaby import right_button, left_button
 #     msleep(500)
 
 
-def linefollow_distance(distance):
+def linefollow_distance(distance, slow=70, fast=100):
     _clear_ticks()
     while _right_ticks() < distance * INCHES_TO_TICKS:
-        if analog(0) <1500:
-            _drive(100, 80)
+        if on_black_front():
+            _drive(slow, fast)
         else:
-            _drive(80, 100)
+            _drive(fast, slow)
+    freeze_motors()
 
 
 def drive_forever(left, right):
@@ -732,9 +736,26 @@ def rotate_spinner(rotations, speed):
     full_rotation = 1400.0
     start = get_motor_position_counter(SPINNER)
     motor_power(SPINNER, speed)
-    while abs(get_motor_position_counter(SPINNER) - start) < abs(full_rotation * rotations):
-        pass
-    print "rotated {} out of {}".format(get_motor_position_counter(SPINNER), abs(full_rotation * rotations))
+
+    tries_remaining = 3
+    previous = 0
+    counter = 0
+
+    while abs(get_motor_position_counter(SPINNER) - start) < abs(full_rotation * rotations) and tries_remaining > 0:
+        if counter >= 10:
+            counter = 0
+            if tries_remaining > 0:
+                motor_power(SPINNER, int(-speed))
+                msleep(300)
+                motor_power(SPINNER, speed)
+            tries_remaining -= 1
+        elif abs(get_motor_position_counter(SPINNER)) == previous:
+            counter += 1
+        else:
+            counter = 0
+            previous = abs(get_motor_position_counter(SPINNER))
+        msleep(10)
+    print "rotated {} out of {}".format(get_motor_position_counter(SPINNER) - start, abs(full_rotation * rotations))
     freeze(SPINNER)
 
 
@@ -754,11 +775,11 @@ def rotate_until_stalled(speed):
 
 
 def wait_for_someone_to_rotate():
-    print "please spin me back"
+    display("please spin me back")
     clear_motor_position_counter(SPINNER)
     while abs(get_motor_position_counter(SPINNER)) < 350:
         pass
-    print "good job"
+    display("good job")
 
 
 def rotate_to_safe():
