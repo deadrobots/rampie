@@ -13,6 +13,7 @@ def main():
     act.get_bin()
     act.go_to_spinner()
     act.go_to_ramp()
+    #act.alt_init()
     act.go_up_ramp()
     shutdown()
 

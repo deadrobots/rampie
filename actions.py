@@ -143,7 +143,7 @@ def go_to_spinner():
     x.rotate_spinner(.25, -80)
     x.drive_speed(4.9,50)
     u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
-    x.rotate_spinner(4,75)
+    x.rotate_spinner(4,50)
     x.rotate_to_safe()
 
 
@@ -163,6 +163,13 @@ def go_to_ramp():
 
     u.wait_for_button()
 
+
+def alt_init():
+    u.move_servo(c.SERVO_JOINT, c.JOINT_RAMP_ON, 2047)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED, 2047)
+    enable_servos()
+    u.wait_for_button()
+    c.startTime = seconds()
 
 def go_up_ramp():
     display("Start of goUpRamp")
@@ -184,24 +191,34 @@ def go_up_ramp():
     #Fix line follow. Tophat might be too high when the robot raises up too high
     #Gyro value might need adjusting
     # x.drive_speed(8, 100)
-    # startTime = seconds()
+    startTime = seconds()
 
-    count = 0
-
-    while count < 7:
-        display((accel_z()))
-        # if seconds()-startTime > 5:
-        #     disable_servos()
-
-        if accel_z() > -800:
-            count = 0
-        else:
-            count += 1
+    x.drive_speed(5, 100)
+    while gyro_y() < 100:
         if u.on_black_front():
             x.drive_forever(70, 100)
         else:
             x.drive_forever(100, 70)
         msleep(10)
+
+    # count = 0
+    # avg = accel_z()
+    # while count < 5:
+    #     if avg > -850:
+    #         count = 0
+    #     else:
+    #         count += 1
+    #     total = accel_z()
+    #     for _ in range(0, 5):
+    #         total += accel_z()
+    #         if u.on_black_front():
+    #             x.drive_forever(70, 100)
+    #         else:
+    #             x.drive_forever(100, 70)
+    #         msleep(10)
+    #     avg = total / 6
+
+
     # set_servo_position(c.SERVO_BIN_ARM, c.ARM_TUCKED)
     # enable_servos()
     x.drive_speed(4, 100)
@@ -209,12 +226,13 @@ def go_up_ramp():
     #     u.move_bin(c.ARM_ALL_UP)
     x.pivot_left_condition(30, u.on_black_front, False)
     x.pivot_right_condition(30, u.on_black_back, False)
-    u.wait_for_button()
+    # u.wait_for_button()
     u.move_bin(c.ARM_ALL_UP)
     msleep(500)
     u.move_servo(c. SERVO_JOINT, c.JOINT_DELIVER,4)
     msleep(500)
-    x.linefollow_distance(24, 30, 50)
+    x.linefollow_distance(27, 30, 50)
     x.pivot_right(-32.5, 50)
-    disable_servos()
-    msleep(5000)
+    disable_servo(c.SERVO_JOINT)
+    msleep(500)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_MAX)
