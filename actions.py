@@ -83,13 +83,13 @@ def start():
 def leave_startbox():
     u.move_servo(c.SERVO_JOINT, c.JOINT_MID)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
-    x.drive_condition(50, 50, u.on_black_front, False)
+    x.drive_condition(80, 80, u.on_black_front, False)
     x.drive_speed(-4, 50)
     x.rotate(-96, 50)
     x.drive_speed(-34, 100)
-    x.drive_condition(50, 50, u.on_black_front, False)
-    x.rotate(92, 50)
-    x.drive_speed(-5, 50)
+    x.drive_condition(80, 80, u.on_black_front, False)
+    x.rotate(92, 60)
+    x.drive_speed(-5, 80)
 
 
 def drive_till_bump():
@@ -102,20 +102,21 @@ def drive_till_bump():
 
 def get_bin():
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED, 100)
-    x.rotate(-88, 50)
+    x.rotate(-86, 50)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
-    u.move_servo(c.SERVO_JOINT, c.JOINT_APPROACH)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
     msleep(500)
-    x.drive_speed(11, 30)
+    x.drive_speed(12, 70)
     u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
     u.move_bin(c.ARM_SWING, 5)
-    u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL)
-    u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH, 5)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL, 5)
+    # u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH, 5)
+    u.move_bin(c.ARM_APPROACH, 5)
     u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE, 5)
     x.drive_speed(-20, 100)
 
 def go_to_spinner():
-    u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED, 5)
     x.drive_speed(10, 50)
     x.pivot_left(-90, 50)
     x.drive_speed(22, -100, True)
@@ -157,11 +158,12 @@ def go_to_ramp():
     # x.pivot_right(-20, 50)
     # x.drive_speed(-8, 100)
     x.rotate(-7, 50)
-    x.drive_speed(-35, 100)
+    x.drive_speed(-23, 100)
+    x.drive_speed(-5, 70)
     x.drive_speed(2, 50)
-    x.pivot_right(-90, 30)
+    x.pivot_right(-90, 60)
 
-    u.wait_for_button()
+    # u.wait_for_button()
 
 
 def alt_init():
@@ -170,6 +172,8 @@ def alt_init():
     enable_servos()
     u.wait_for_button()
     c.startTime = seconds()
+    u.move_bin(c.ARM_ALL_UP)
+    u.wait_for_button()
 
 def go_up_ramp():
     display("Start of goUpRamp")
@@ -194,7 +198,7 @@ def go_up_ramp():
     startTime = seconds()
 
     x.drive_speed(5, 100)
-    while gyro_y() < 100:
+    while gyro_y() < 100 or seconds() < startTime + 2:
         if u.on_black_front():
             x.drive_forever(70, 100)
         else:
@@ -231,7 +235,7 @@ def go_up_ramp():
     msleep(500)
     u.move_servo(c. SERVO_JOINT, c.JOINT_DELIVER,4)
     msleep(500)
-    x.linefollow_distance(27, 30, 50)
+    x.linefollow_distance(27, 50, 70)
     x.pivot_right(-32.5, 50)
     disable_servo(c.SERVO_JOINT)
     msleep(500)

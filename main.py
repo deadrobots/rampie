@@ -5,6 +5,10 @@ from utils import shutdown
 from logger import log as display
 
 def main():
+
+    # act.alt_init()
+    # act.shutdown()
+
     display("Checking")
     act.self_test()
     act.start()
