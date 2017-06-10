@@ -7,7 +7,7 @@ from logger import log as display
 def main():
 
     # act.alt_init()
-    # act.shutdown()
+    # shutdown()
 
     display("Checking")
     act.self_test()

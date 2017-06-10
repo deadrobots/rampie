@@ -141,11 +141,11 @@ def go_to_spinner():
     # u.move_servo(c.SERVO_JOINT, c.JOINT_APPROACH)
     # line_follow_untill_end_right()
 
-    x.rotate_spinner(.25, -80)
-    x.drive_speed(4.9,50)
+    x.rotate_spinner(.25, 80)
+    x.drive_speed(5,50)
     u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
-    x.rotate_spinner(4,50)
-    x.rotate_to_safe()
+    x.rotate_spinner(4, -50)
+    x.rotate_to_safe(50)
 
 
 def go_to_ramp():
@@ -157,11 +157,21 @@ def go_to_ramp():
     # x.drive_speed(-5,100)
     # x.pivot_right(-20, 50)
     # x.drive_speed(-8, 100)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_ARM_TILT)
     x.rotate(-7, 50)
-    x.drive_speed(-23, 100)
+    x.drive_forever(-50, -50)
+    u.move_bin(c.ARM_TILT, 5)
+    x.drive_speed(-10, 100)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_HOLD, 5)
+    u.move_bin(c.ARM_TUCKED, 5)
+    msleep(100)
+
+
+    x.drive_speed(-5, 100)
     x.drive_speed(-5, 70)
     x.drive_speed(2, 50)
     x.pivot_right(-90, 60)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_MID)
 
     # u.wait_for_button()
 
@@ -171,8 +181,7 @@ def alt_init():
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED, 2047)
     enable_servos()
     u.wait_for_button()
-    c.startTime = seconds()
-    u.move_bin(c.ARM_ALL_UP)
+    x.drive_speed(70, 100)
     u.wait_for_button()
 
 def go_up_ramp():
@@ -230,6 +239,7 @@ def go_up_ramp():
     #     u.move_bin(c.ARM_ALL_UP)
     x.pivot_left_condition(30, u.on_black_front, False)
     x.pivot_right_condition(30, u.on_black_back, False)
+    x.pivot_left_condition(30, u.on_black_front, False)
     # u.wait_for_button()
     u.move_bin(c.ARM_ALL_UP)
     msleep(500)
@@ -240,3 +250,6 @@ def go_up_ramp():
     disable_servo(c.SERVO_JOINT)
     msleep(500)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_MAX)
+    msleep(500)
+    x.drive_speed(1, 50)
+    x.pivot_right(30, 50)

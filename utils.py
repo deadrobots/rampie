@@ -183,7 +183,10 @@ def move_bin(armIn, speed=10): # 1263
     joint_start = get_servo_position(c.SERVO_JOINT) # 1750
     arm_start = get_servo_position(c.SERVO_BIN_ARM) # 700
     delta = armEnd - arm_start # 563
-    for shift in range(0, delta, speed):
+
+    for shift in range(0, abs(delta), speed):
+        if delta < 0:
+            shift = -shift # handles negative values (moving bin downwards)
         set_servo_position(c.SERVO_BIN_ARM, arm_start + shift)
         set_joint = joint_start + shift
         if set_joint > 1900:
@@ -200,7 +203,7 @@ def move_bin(armIn, speed=10): # 1263
         set_joint = 1900
     elif set_joint < 5:
         set_joint = 5
-    set_servo_position(c.SERVO_BIN_ARM, arm_start + delta)
+    set_servo_position(c.SERVO_BIN_ARM, armEnd)
     set_servo_position(c.SERVO_JOINT, set_joint)
 
 def shutdown():

@@ -47,9 +47,9 @@ ADJUST = 1.0 #0.96    #1.01
 
 if IS_CLONE:
     # Drive Constants
-    INCHES_TO_TICKS = 215  # 169   #205 - 161     #156#127#50 cm #265
+    INCHES_TO_TICKS = 205  # 169   #205 - 161     #156#127#50 cm #265
     WHEEL_DISTANCE = 7.4  # 205 - 4.25  # Distance between the two wheels
-    ADJUST = 1.06  # adjust left wheel counter to fix drift
+    ADJUST = 1.023  # adjust left wheel counter to fix drift
 
 
 # Motor Control #
@@ -782,9 +782,9 @@ def wait_for_someone_to_rotate():
     display("good job")
 
 
-def rotate_to_safe():
+def rotate_to_safe(power):
     full_rotation = 1400.0
-    motor_power(SPINNER, -50)
+    motor_power(SPINNER, power)
     while abs(get_motor_position_counter(SPINNER)) % full_rotation > 50:
         pass
     freeze(SPINNER)
