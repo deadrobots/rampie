@@ -13,30 +13,21 @@ from constants import IS_CLONE
 from constants import LMOTOR
 from constants import RMOTOR
 from constants import SPINNER
-from constants import THRESHOLD_TOPHAT
-# from constants import LTOPHAT
-
 from utils import wait_for_button
-
 from math import pi
-
-from wallaby import digital
 from wallaby import ao
 from wallaby import clear_motor_position_counter
 from wallaby import freeze
 from wallaby import get_motor_position_counter
-# from wallaby import motor
 from wallaby import msleep
 from wallaby import seconds
 from wallaby import analog
-from wallaby import accel_x
 from wallaby import motor_power as motor
 from wallaby import motor_power
+from wallaby import digital
 from wallaby import magneto_x, magneto_y, magneto_z, accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z
 from logger import log as display
 from utils import on_black_front
-
-# from logger import data_log
 
 
 # Drive Constants
@@ -140,69 +131,35 @@ def arc_radius(angle, turnRadius, speed):  # Turns the robot "angle" degrees by 
 
 def drive_speed(inches, speed, accel=False):  # Drives an exact distance in inches.
     print "driving exact distance"
-
     scale = 1.3
     sum = 0
-
     max_error = 0
     max_sum = 0
-
     total_time = 0
     number_times = 0
     last_time = seconds()
-
     right = False
-
     if inches < 0:
         speed = -speed
     _clear_ticks()
     ticks = abs(INCHES_TO_TICKS * inches)
-
     remain = 0
     if accel:
         for sp in range(1, speed, int(speed/10)):
             drive_timed_straight(sp, .025)
         remain = int((_left_ticks() + _right_ticks()) / 2)
         _clear_ticks()
-
-    # data_log("time\tmag_x\tmag_y\tmag_z\t\tgyr_x\tgyr_y\tgyr_z\tacc_x\tacc_y\tacc_z", "data.log")
     while _right_ticks() <= ticks - remain:
-
-        info = ("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d") % (seconds(), magneto_x(), magneto_y(), magneto_z(), gyro_x(), gyro_y(), gyro_z(), accel_x(), accel_y(), accel_z())
-        # data_log(info, "data.log")
-        # print "info " + info
-
         left = _left_ticks()
         right = _right_ticks()
         error = right - left
         sum += error
-        # if sum > 300:
-        #     sum = 300
-        # elif sum < -300:
-        #     sum = -300
         if abs(sum) > abs(max_sum):
             max_sum = sum
         if abs(error) > max_error:
             max_error = abs(error)
-            # print "hey!"
-            # if right > left:
-            #     motor_to_move = LMOTOR
-            #     motor_to_not_move = RMOTOR
-            # else:
-            #     motor_to_move = RMOTOR
-            #     motor_to_not_move = LMOTOR
-            # ticks_to_get = get_motor_position_counter(motor_to_move) + error
-            # if speed > 0:
-            #     while get_motor_position_counter(motor_to_move) < ticks_to_get:
-            #         motor(motor_to_move, speed)
-            #         motor(motor_to_not_move, 0)
-            # else:
-            #     while get_motor_position_counter(motor_to_move) > ticks_to_get:
-            #         motor(motor_to_move, speed)
-            #         motor(motor_to_not_move, 00)
-
-        p_scale = error * 0.018 # .015  osc at p = .04, T = 0.028 # P, p = .02 # PI, p = .018 i = 0.7714
-        i_scale = sum * 0.001 #0.7714
+        p_scale = error * 0.018
+        i_scale = sum * 0.001
 
         adjustment = p_scale + i_scale
         scale = abs(adjustment) + 1
@@ -218,19 +175,8 @@ def drive_speed(inches, speed, accel=False):  # Drives an exact distance in inch
                 total_time += now - last_time
                 last_time = now
                 number_times += 1
-                # print total_time / number_times
             right = False
             _drive(int(speed / scale), speed)
-
-        # if right == left:
-        #     _drive(speed, speed)
-        # elif right > left:
-        #     _drive(speed, int(speed / scale))
-        # elif left > right:
-        #     _drive(int(speed / scale), speed)
-
-        # print "error %s, sum %s" % (error, sum)
-
     freeze_motors()
     print "max error: " + str(max_error)
     print "max sum: " + str(max_sum)
@@ -260,33 +206,13 @@ def drive_timed_straight(speed, time, clear=False):
         right = _right_ticks()
         error = right - left
         sum += error
-        # if sum > 300:
-        #     sum = 300
-        # elif sum < -300:
-        #     sum = -300
+
         if abs(sum) > abs(max_sum):
             max_sum = sum
         if abs(error) > max_error:
             max_error = abs(error)
-            # print "hey!"
-            # if right > left:
-            #     motor_to_move = LMOTOR
-            #     motor_to_not_move = RMOTOR
-            # else:
-            #     motor_to_move = RMOTOR
-            #     motor_to_not_move = LMOTOR
-            # ticks_to_get = get_motor_position_counter(motor_to_move) + error
-            # if speed > 0:
-            #     while get_motor_position_counter(motor_to_move) < ticks_to_get:
-            #         motor(motor_to_move, speed)
-            #         motor(motor_to_not_move, 0)
-            # else:
-            #     while get_motor_position_counter(motor_to_move) > ticks_to_get:
-            #         motor(motor_to_move, speed)
-            #         motor(motor_to_not_move, 00)
-
-        p_scale = error * 0.018  # .015  osc at p = .04, T = 0.028 # P, p = .02 # PI, p = .018 i = 0.7714
-        i_scale = sum * 0.001  # 0.7714
+        p_scale = error * 0.018
+        i_scale = sum * 0.001
 
         adjustment = p_scale + i_scale
         scale = abs(adjustment) + 1
@@ -305,14 +231,6 @@ def drive_timed_straight(speed, time, clear=False):
                 print total_time / number_times
             right = False
             _drive(int(speed / scale), speed)
-
-        # if right == left:
-        #     _drive(speed, speed)
-        # elif right > left:
-        #     _drive(speed, int(speed / scale))
-        # elif left > right:
-        #     _drive(int(speed / scale), speed)
-
         print "error %s, sum %s" % (error, sum)
 
 
@@ -397,9 +315,6 @@ def rotate_compass(deg, speed):  # Rotates by using both wheels equally.
     ticks = int(INCHES_TO_TICKS * inches)
     _clear_ticks()
     _drive(-speed, speed)
-    # data_log("time\tmag_x\tmag_y\tmag_z\t\tgyr_x\tgyr_y\tgyr_z\tacc_x\tacc_y\tacc_z", "data.log")
-    # import constants as c
-    # c.startTime = seconds()
 
     for _ in range(0, 10):
         magneto_x()
@@ -416,9 +331,7 @@ def rotate_compass(deg, speed):  # Rotates by using both wheels equally.
     data = {"min_x": mx, "min_y": my, "max_x": mx, "max_y": my}
 
     while _right_ticks() <= ticks:
-        # info = ("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d") % (
-        # seconds(), magneto_x(), magneto_y(), magneto_z(), gyro_x(), gyro_y(), gyro_z(), accel_x(), accel_y(), accel_z())
-        # data_log(info, "data.log")
+
         mag_x = magneto_x()
         mag_y = magneto_y()
 
@@ -526,32 +439,6 @@ def change_adjust(x):
         ADJUST = 1.08 # add if clone 0.98
 
 
-# def drive_speed_saw_black(inches, speed):  # Drives an exact distance in inches.
-#     print "driving exact distance"
-#     sawBlack = False
-#     if inches < 0:
-#         speed = -speed
-#     _clear_ticks()
-#     ticks = abs(INCHES_TO_TICKS * inches)
-#     while _right_ticks() <= ticks:
-#         if _right_ticks() == _left_ticks():
-#             _drive(speed, speed)
-#         if _right_ticks() > _left_ticks():
-#             _drive(speed, int(speed / 1.3))
-#         if _left_ticks() > _right_ticks():
-#             _drive(int(speed / 1.3), speed)
-#         if seeBlackRight() or seeBlackLeft():
-#             sawBlack = True
-#     freeze_motors()
-#     print ticks
-#     print get_motor_position_counter(RMOTOR)
-#     if seeBlackRight() or seeBlackLeft():
-#         return 0
-#     elif sawBlack:
-#         return 1
-#     else:
-#         return 2
-
 #### AWFUL ATTTEMPTS TO CALIBRATE ####
 
 
@@ -619,11 +506,6 @@ def calibrate2(inches=24, speed=50):
             if _left_ticks() > _right_ticks():
                 _drive(int(speed / 1.3), speed)
 
-        # if i < 0:
-        #     lAdjust = lAdjust + (0.0005 * i)
-        # elif i > 0:
-        #     lAdjust = lAdjust - (0.0005 * i)
-
         lAdjust = rTime / lTime
 
         if prevAdjust != -1:
@@ -663,9 +545,6 @@ def calibrate3():
     print "Value: " + str(endL / endR)
 
 
-
-from wallaby import digital
-
 def calibrate5():
     _clear_ticks()
     while not digital(13):
@@ -678,7 +557,7 @@ def calibrate5():
     global lAdjust
     lAdjust = x
     print(x)
-    # open(("adjust-" + str(isClone)), "w").write(str(x))
+
 
 def calibrate6():
     global lAdjust

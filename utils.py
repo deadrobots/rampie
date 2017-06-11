@@ -123,10 +123,13 @@ def get_wait():
     return seconds() < time
 
 
-def wait_4_light():
+def wait_4_light(ignore=False):
+    if ignore:
+        wait_for_button()
+        return
     while not calibrate(c.STARTLIGHT):
         pass
-    wait_4(c.STARTLIGHT)
+    _wait_4(c.STARTLIGHT)
 
 from wallaby import left_button, right_button
 
@@ -162,7 +165,7 @@ def calibrate(port):
     return True
 
 
-def wait_4(port):
+def _wait_4(port):
     display ("waiting for light!! ")
     if c.seeding:
         display("SEEDING")
