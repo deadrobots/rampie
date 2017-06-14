@@ -11,9 +11,10 @@ def alt_init():
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED, 2047)
     enable_servos()
     u.wait_for_button()
-    u.move_bin(c.ARM_SWING)
-    u.move_bin(c.ARM_ALL_UP)
+    # u.move_bin(c.ARM_SWING)
+    # u.move_bin(c.ARM_ALL_UP)
     # x.drive_speed(70, 100)
+    x.rotate(180, 100)
     u.wait_for_button()
 
 def select():
@@ -141,7 +142,10 @@ def drive_till_bump():
 def get_bin():
     display("\nFunction: get_bin\n")
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED, 100)
-    x.rotate(-86, 50)
+    if c.IS_CLONE:
+        x.rotate(-81, 50)
+    else:
+        x.rotate(-86, 50)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
     u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
     msleep(250)
@@ -168,10 +172,7 @@ def go_to_spinner():
     x.pivot_right(-32, 50)
     x.drive_speed(-3, 50)
     x.drive_condition(50, 50, u.on_black_front, False)
-    if c.IS_CLONE:
-        x.rotate(90, 30)
-    else:
-        x.rotate(95, 30)
+    x.rotate(95, 30)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
     u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL)
     x.drive_condition(80, 80, u.on_black_front, False)
@@ -218,6 +219,10 @@ def go_up_ramp():
         msleep(10)
     x.drive_speed(4, 100)
     x.pivot_left_condition(30, u.on_black_front, False)
+
+    if u.on_black_back():
+        x.pivot_right(15, 30)
+
     x.pivot_right_condition(30, u.on_black_back, False)
     x.pivot_left_condition(30, u.on_black_front, False)
     u.move_bin(c.ARM_ALL_UP)
