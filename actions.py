@@ -144,7 +144,7 @@ def get_bin():
     x.rotate(-86, 50)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
     u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
-    msleep(500)
+    msleep(250)
     x.drive_speed(12, 70)
     u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
     u.move_bin(c.ARM_SWING, 5)
@@ -157,7 +157,10 @@ def get_bin():
 def go_to_spinner():
     display("\nFunction: go_to_spinner\n")
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED, 5)
-    x.drive_speed(10, 50)
+    if c.IS_CLONE:
+        x.drive_speed(10, 50)
+    else:
+        x.drive_speed(11, 50)
     x.pivot_left(-90, 50)
     x.drive_speed(22, -100, True)
     x.pivot_left(-32, 50)
@@ -165,15 +168,18 @@ def go_to_spinner():
     x.pivot_right(-32, 50)
     x.drive_speed(-3, 50)
     x.drive_condition(50, 50, u.on_black_front, False)
-    x.rotate(90, 30)
+    if c.IS_CLONE:
+        x.rotate(90, 30)
+    else:
+        x.rotate(95, 30)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
     u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL)
-    x.drive_condition(40, 40, u.on_black_front, False)
-    x.drive_condition(40, 40, u.on_black_front, True)
+    x.drive_condition(80, 80, u.on_black_front, False)
+    x.drive_condition(50, 50, u.on_black_front, True)
     x.rotate_spinner(.25, 80)
     x.drive_speed(5,50)
     u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
-    x.rotate_spinner(4, -50)
+    x.rotate_spinner(4, -70)
     x.rotate_to_safe(50)
 
 
@@ -181,7 +187,10 @@ def go_to_ramp():
     display("\nFunction: go_to_ramp\n")
     u.move_servo(c.SERVO_JOINT, c.JOINT_RAMP_ON)
     u.move_servo(c.SERVO_JOINT, c.JOINT_ARM_TILT)
-    x.rotate(-7, 50)
+    if c.IS_CLONE:
+        x.rotate(-7, 50)
+    else:
+        x.rotate(-5, 50)
     x.drive_forever(-50, -50)
     u.move_bin(c.ARM_TILT, 5)
     x.drive_speed(-10, 100)
@@ -221,9 +230,14 @@ def go_and_score_the_bin():
     msleep(500)
     x.linefollow_distance(27, 50, 70)
     x.pivot_right(-32.5, 50)
+    if not c.IS_CLONE:
+        x.drive_speed(1, 50)
     disable_servo(c.SERVO_JOINT)
     msleep(500)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_MAX)
     msleep(500)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_HIT, 20)
+    msleep(300)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_MAX, 20)
     x.drive_speed(1, 50)
     x.pivot_right(30, 50)
