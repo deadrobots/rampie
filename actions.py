@@ -5,6 +5,22 @@ import constants as c
 from logger import log as display
 
 
+def test_ramp():
+    enable_servos()
+    u.move_servo(c.DEPLOYABLE_WHEELS, c.WHEELS_DEPLOYED)
+    u.move_bin(c.ARM_SWING)
+    x.drive_speed(12, 100)
+    start_time = seconds()
+    x.drive_speed(5, 100)
+    while gyro_y() < 100 or seconds() < start_time + 2:
+        if u.on_black_front():
+            x.drive_forever(70, 100)
+        else:
+            x.drive_forever(100, 70)
+        msleep(10)
+    x.drive_speed(4, 100)
+    x.pivot_left_condition(30, u.on_black_front, False)
+
 
 def alt_init():
     u.move_servo(c.SERVO_JOINT, c.JOINT_MID, 2047)
@@ -13,9 +29,10 @@ def alt_init():
     u.wait_for_button()
     # u.move_bin(c.ARM_SWING)
     # u.move_bin(c.ARM_ALL_UP)
-    # x.drive_speed(70, 100)
-    x.rotate(180, 100)
-    u.wait_for_button()
+    x.drive_speed(70, 100)
+    # x.rotate(180, 50)
+    # u.wait_for_button()
+    # go_up_ramp()
 
 def select():
     end = seconds() + 3
@@ -72,10 +89,10 @@ def init():
         display("I AM CLONE")
     else:
         display("I AM PRIME")
-    enable_servos()
-    msleep(2500)
-    x.linefollow_distance(23.46)
-    u.DEBUG_WITH_WAIT()
+    # enable_servos()
+    # msleep(2500)
+    # x.linefollow_distance(23.46)
+    # u.DEBUG_WITH_WAIT()
 
 
 def self_test():
@@ -115,6 +132,7 @@ def self_test():
 def start():
     display("\nFunction: start\n")
     u.wait_4_light(ignore=True)
+    msleep(2000)
     shut_down_in(119)
     c.startTime = seconds()
     display("NOTE: {}\t{}".format(seconds(), c.startTime))
@@ -172,7 +190,7 @@ def go_to_spinner():
     x.pivot_right(-32, 50)
     x.drive_speed(-3, 50)
     x.drive_condition(50, 50, u.on_black_front, False)
-    x.rotate(95, 30)
+    x.rotate(90, 30)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
     u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL)
     x.drive_condition(80, 80, u.on_black_front, False)

@@ -33,14 +33,14 @@ from utils import on_black_front
 # Drive Constants
 INCHES_TO_TICKS = 205
 WHEEL_DISTANCE = 7.4 #205 - 4.25  # Distance between the two wheels
-ADJUST = 1.01 #0.96    #1.01
+ADJUST = 1.0 #0.96    #1.01
 
 
 if IS_CLONE:
     # Drive Constants
-    INCHES_TO_TICKS = 205  # 169   #205 - 161     #156#127#50 cm #265
+    INCHES_TO_TICKS = 204  # 169   #205 - 161     #156#127#50 cm #265
     WHEEL_DISTANCE = 7.4  # 205 - 4.25  # Distance between the two wheels
-    ADJUST = 1.023  # adjust left wheel counter to fix drift
+    ADJUST = 1.025  # adjust left wheel counter to fix drift
 
 
 # Motor Control #

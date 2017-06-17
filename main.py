@@ -7,12 +7,6 @@ from logger import log as display
 
 def main():
     display("Checking")
-
-    # act.alt_init()
-    # shutdown()
-
-    act.select2()
-
     act.self_test()
     act.start()
     act.leave_startbox()
