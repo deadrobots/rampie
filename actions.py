@@ -131,7 +131,7 @@ def self_test():
 
 def start():
     display("\nFunction: start\n")
-    u.wait_4_light(ignore=True)
+    u.wait_4_light(ignore=False)
     msleep(2000)
     shut_down_in(119)
     c.startTime = seconds()
@@ -238,8 +238,9 @@ def go_up_ramp():
     x.drive_speed(4, 100)
     x.pivot_left_condition(30, u.on_black_front, False)
 
-    if u.on_black_back():
-        x.pivot_right(15, 30)
+    # if u.on_black_back():
+    x.pivot_right_condition(30, u.on_black_back)
+        # x.pivot_right(35, 30)
 
     x.pivot_right_condition(30, u.on_black_back, False)
     x.pivot_left_condition(30, u.on_black_front, False)
@@ -264,3 +265,8 @@ def go_and_score_the_bin():
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_MAX, 20)
     x.drive_speed(1, 50)
     x.pivot_right(30, 50)
+
+
+
+def get_extra_three_poms():
+    pass

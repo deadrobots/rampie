@@ -141,7 +141,7 @@ def calibrate(port):
     while left_button():
         pass
     lightOn = analog(port)
-    display ("On value =", lightOn)
+    display ("On value =" + str(lightOn))
     if lightOn > 200:
         display ("Bad calibration")
         return False
@@ -152,25 +152,21 @@ def calibrate(port):
     while right_button():
         pass
     lightOff = analog(port)
-    display ("Off value =", lightOff)
+    display ("Off value =" + str(lightOff))
     if lightOff < 3000:
         display ("Bad calibration")
         return False
 
     if (lightOff - lightOn) < 2000:
-        display ("Bad calibration")
+        display("Bad calibration")
         return False
     c.startLightThresh = (lightOff - lightOn) / 2
-    display ("Good calibration! ", c.startLightThresh)
+    display ("Good calibration! " + str(c.startLightThresh))
     return True
 
 
 def _wait_4(port):
     display ("waiting for light!! ")
-    if c.seeding:
-        display("SEEDING")
-    else:
-        display("HEAD TO HEAD")
     while analog(port) > c.startLightThresh:
         pass
 
