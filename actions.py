@@ -173,7 +173,14 @@ def get_bin():
     u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL, 5)
     u.move_bin(c.ARM_APPROACH, 5)
     u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE, 5)
-    x.drive_speed(-20, 100)
+    if c.VERSION == 0:
+        x.drive_speed(15,-100)
+        x.pivot_left(80,50)
+        x.drive_speed(20,-100)
+        x.pivot_right(80,50)
+        x.drive_speed(-20,100)
+    else:
+        x.drive_speed(-20, 100)
 
 
 def go_to_spinner():
