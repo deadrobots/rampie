@@ -149,7 +149,7 @@ def leave_startbox():
     x.drive_speed(-34, 100)
     x.drive_condition(80, 80, u.on_black_front, False)
     x.rotate(92, 60)
-    x.drive_speed(-5, 80)
+    x.drive_speed(-6, 80)
 
 
 def drive_till_bump():
@@ -160,27 +160,38 @@ def drive_till_bump():
 def get_bin():
     display("\nFunction: get_bin\n")
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED, 100)
-    if c.IS_CLONE:
-        x.rotate(-81, 50)
+    if c.VERSION ==1:
+      x.drive_speed(22,100)
+      x.rotate(35,100)
+      u.move_servo(c.SERVO_JOINT, c.JOINT_MID + 100)
+      x.drive_timed(100, 30, 5)
+      u.move_servo(c.SERVO_JOINT, c.JOINT_MID)
+      x.drive_timed(-100, -30, 2)
+      x.drive_speed(-36, 100)
+      x.pivot_left(90, 100)
+      u.DEBUG_WITH_WAIT()
     else:
-        x.rotate(-86, 50)
-    u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
-    u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
-    msleep(250)
-    x.drive_speed(12, 70)
-    u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
-    u.move_bin(c.ARM_SWING, 5)
-    u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL, 5)
-    u.move_bin(c.ARM_APPROACH, 5)
-    u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE, 5)
-    if c.VERSION == 0:
-        x.drive_speed(15,-100)
-        x.pivot_left(80,50)
-        x.drive_speed(20,-100)
-        x.pivot_right(80,50)
-        x.drive_speed(-20,100)
-    else:
-        x.drive_speed(-20, 100)
+        if c.IS_CLONE:
+            x.rotate(-81, 50)
+        else:
+            x.rotate(-86, 50)
+        u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
+        u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
+        msleep(250)
+        x.drive_speed(12, 70)
+        u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
+        u.move_bin(c.ARM_SWING, 5)
+        u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL, 5)
+        u.move_bin(c.ARM_APPROACH, 5)
+        u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE, 5)
+        if c.VERSION == 0:
+            x.drive_speed(15,-100)
+            x.pivot_left(80,50)
+            x.drive_speed(20,-100)
+            x.pivot_right(80,50)
+            x.drive_speed(-20,100)
+        else:
+            x.drive_speed(-20, 100)
 
 
 def go_to_spinner():
