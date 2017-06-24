@@ -122,6 +122,8 @@ def self_test():
     x.set_spinner_safe()
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
+    u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_OUT)
+    u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_IN)
     msleep(500)
     x.rotate(15,60)
     msleep(1000)
@@ -145,7 +147,7 @@ def leave_startbox():
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
     x.drive_condition(80, 80, u.on_black_front, False)
     x.drive_speed(-4, 50)
-    x.rotate(-96, 50)
+    x.rotate(-96, 70)
     x.drive_speed(-34, 100)
     x.drive_condition(80, 80, u.on_black_front, False)
     x.rotate(92, 60)
@@ -160,38 +162,24 @@ def drive_till_bump():
 def get_bin():
     display("\nFunction: get_bin\n")
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED, 100)
-    if c.VERSION ==1:
-      x.drive_speed(22,100)
-      x.rotate(35,100)
-      u.move_servo(c.SERVO_JOINT, c.JOINT_MID + 100)
-      x.drive_timed(100, 30, 5)
-      u.move_servo(c.SERVO_JOINT, c.JOINT_MID)
-      x.drive_timed(-100, -30, 2)
-      x.drive_speed(-36, 100)
-      x.pivot_left(90, 100)
-      u.DEBUG_WITH_WAIT()
+    if c.IS_CLONE:
+        x.rotate(-81, 50)
     else:
-        if c.IS_CLONE:
-            x.rotate(-81, 50)
-        else:
-            x.rotate(-86, 50)
-        u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
-        u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
-        msleep(250)
-        x.drive_speed(12, 70)
-        u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
-        u.move_bin(c.ARM_SWING, 5)
-        u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL, 5)
-        u.move_bin(c.ARM_APPROACH, 5)
-        u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE, 5)
-        if c.VERSION == 0:
-            x.drive_speed(15,-100)
-            x.pivot_left(80,50)
-            x.drive_speed(20,-100)
-            x.pivot_right(80,50)
-            x.drive_speed(-20,100)
-        else:
-            x.drive_speed(-20, 100)
+        x.rotate(-86, 50)
+    u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
+    msleep(250)
+    x.drive_speed(12, 70)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
+    u.move_bin(c.ARM_SWING, 5)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL, 5)
+    u.move_bin(c.ARM_APPROACH, 5)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE, 5)
+    x.drive_speed(-20, 100)
+    u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_OUT, 100)
+    x.pivot_right(30,75)
+    x.pivot_right(-30, 75)
+    u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_IN, 100)
 
 
 def go_to_spinner():
@@ -200,8 +188,8 @@ def go_to_spinner():
     if c.IS_CLONE:
         x.drive_speed(10, 50)
     else:
-        x.drive_speed(11, 50)
-    x.pivot_left(-90, 50)
+        x.drive_speed(11, 70)
+    x.pivot_left(-90, 70)
     x.drive_speed(22, -100, True)
     x.pivot_left(-32, 50)
     x.drive_speed(-11, 60)
@@ -234,13 +222,13 @@ def go_to_ramp():
     x.drive_forever(-50, -50)
     u.move_bin(c.ARM_TILT, 5)
     x.drive_speed(-10, 100)
-    x.rotate(5, 50)
+    x.rotate(5, 65)
     u.move_servo(c.SERVO_JOINT, c.JOINT_HOLD, 5)
     u.move_bin(c.ARM_TUCKED, 5)
     msleep(100)
     x.drive_speed(-7, 100)
     x.drive_speed(-6, 70)
-    x.drive_speed(2, 50)
+    x.drive_speed(2, 70)
     x.pivot_right(-90, 60)
     u.move_servo(c.SERVO_JOINT, c.JOINT_MID)
 
@@ -257,7 +245,8 @@ def go_up_ramp():
         else:
             x.drive_forever(100, 70)
         msleep(10)
-    x.drive_speed(4, 100)
+    x.drive_speed(8, 100)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
     x.pivot_left_condition(30, u.on_black_front, False)
 
     # if u.on_black_back():

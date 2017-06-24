@@ -12,10 +12,10 @@ def main():
     act.leave_startbox()
     act.drive_till_bump()
     act.get_bin()
-    #act.go_to_spinner()
-    #act.go_to_ramp()
-    #act.go_up_ramp()
-    #act.go_and_score_the_bin()
+    act.go_to_spinner()
+    act.go_to_ramp()
+    act.go_up_ramp()
+    act.go_and_score_the_bin()
     shutdown()
 
 if __name__ == "__main__":
