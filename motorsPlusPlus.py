@@ -28,6 +28,7 @@ from wallaby import digital
 from wallaby import magneto_x, magneto_y, magneto_z, accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z
 from logger import log as display
 from utils import on_black_front
+from logger import log as display
 
 
 # Drive Constants
@@ -177,29 +178,31 @@ def drive_speed(inches, speed, accel=False):  # Drives an exact distance in inch
                 number_times += 1
             right = False
             _drive(int(speed / scale), speed)
+        display("adjustment: {}".format(adjustment))
+        display("scale: ".format(scale))
+        display("max error: " + str(max_error))
+        display("max sum: " + str(max_sum))
+        display("current error " + str(error))
+        display("current sum " + str(sum))
     freeze_motors()
-    print "max error: " + str(max_error)
-    print "max sum: " + str(max_sum)
-    print "current error " + str(error)
-    print "current sum " + str(sum)
+    display("DONE")
+    display("max error: " + str(max_error))
+    display("max sum: " + str(max_sum))
+    display("current error " + str(error))
+    display("current sum " + str(sum))
 
 def drive_timed_straight(speed, time, clear=False):
     print "corrected driving for time"
-
     scale = 1.3
     sum = 0
-
     max_error = 0
     max_sum = 0
-
     total_time = 0
     number_times = 0
     last_time = seconds()
     if clear:
         _clear_ticks()
-
     start_time = seconds()
-
     while seconds() <= time + start_time:
 
         left = _left_ticks()

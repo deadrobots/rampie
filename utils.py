@@ -190,10 +190,10 @@ def move_bin(armIn, speed=10): # 1263
         set_joint = joint_start + shift
         if set_joint > 1900:
             set_joint = 1900
-            return
+            # return
         elif set_joint < 5:
             set_joint = 5
-            return
+            # return
         set_servo_position(c.SERVO_JOINT, set_joint)
 
         display ("{}\t{}".format(get_servo_position(c.SERVO_JOINT), get_servo_position(c.SERVO_BIN_ARM)))

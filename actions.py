@@ -6,6 +6,10 @@ from logger import log as display
 
 
 def test_ramp():
+
+    x.drive_speed(100, 100)
+    u.DEBUG()
+
     enable_servos()
     u.move_servo(c.DEPLOYABLE_WHEELS, c.WHEELS_DEPLOYED)
     u.move_bin(c.ARM_SWING)
@@ -265,6 +269,14 @@ def go_and_score_the_bin():
     msleep(500)
     x.linefollow_distance(28, 50, 70)
     x.pivot_right(-32.5, 50)
+
+    # x.drive_speed(-2, 50)
+    # x.rotate(-10, 50)
+    # x.drive_speed(2.5, 50)
+    # x.pivot_right(40, 50)
+    # x.drive_speed(2.5, 50)
+    # u.wait_for_button()
+
     if not c.IS_CLONE:
         x.drive_speed(1, 50)
     disable_servo(c.SERVO_JOINT)
@@ -279,5 +291,3 @@ def go_and_score_the_bin():
 
 
 
-def get_extra_three_poms():
-    pass

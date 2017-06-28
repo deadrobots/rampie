@@ -6,6 +6,10 @@ from logger import log as display
 
 
 def main():
+
+    # act.test_ramp()
+    # shutdown()
+
     display("Checking")
     act.self_test()
     act.start()
