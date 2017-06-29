@@ -167,7 +167,7 @@ def get_bin():
     display("\nFunction: get_bin\n")
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED, 100)
     if c.IS_CLONE:
-        x.rotate(-81, 50)
+        x.rotate(-86, 50)
     else:
         x.rotate(-86, 50)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
@@ -265,9 +265,11 @@ def go_up_ramp():
 
 def go_and_score_the_bin():
     display("\nFunction: go_and_score_the_bin\n")
-    u.move_servo(c. SERVO_JOINT, c.JOINT_DELIVER,4)
+    u.move_servo(c.SERVO_JOINT, c.JOINT_DELIVER,4)
     msleep(500)
-    x.linefollow_distance(28, 50, 70)
+    u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_OUT, 100)
+    # x.linefollow_distance(28, 50, 70)
+    x.linefollow_distance(28, 50, 70, 5)
     x.pivot_right(-32.5, 50)
 
     # x.drive_speed(-2, 50)

@@ -600,13 +600,13 @@ from wallaby import right_button, left_button
 #     msleep(500)
 
 
-def linefollow_distance(distance, slow=70, fast=100):
+def linefollow_distance(distance, slow=70, fast=100, add_left=0):
     _clear_ticks()
     while _right_ticks() < distance * INCHES_TO_TICKS:
         if on_black_front():
-            _drive(slow, fast)
+            _drive(slow, fast - add_left)
         else:
-            _drive(fast, slow)
+            _drive(fast + add_left, slow)
     freeze_motors()
 
 
