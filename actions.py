@@ -138,7 +138,10 @@ def self_test():
 def start():
     display("\nFunction: start\n")
     u.wait_4_light(ignore=False)
-    msleep(2000)
+    if c.IS_CLONE:
+        msleep(2500)
+    else:
+        msleep(2000)
     shut_down_in(119)
     c.startTime = seconds()
     display("NOTE: {}\t{}".format(seconds(), c.startTime))
@@ -190,7 +193,7 @@ def go_to_spinner():
     display("\nFunction: go_to_spinner\n")
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED, 5)
     if c.IS_CLONE:
-        x.drive_speed(10, 50)
+        x.drive_speed(10, 100)   #was 50
     else:
         x.drive_speed(11, 70)
     x.pivot_left(-90, 70)
