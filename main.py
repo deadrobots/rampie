@@ -11,6 +11,7 @@ def main():
     # shutdown()
 
     display("Checking")
+    act.init()
     act.self_test()
     act.start()
     act.leave_startbox()

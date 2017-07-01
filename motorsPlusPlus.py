@@ -34,7 +34,7 @@ from logger import log as display
 # Drive Constants
 INCHES_TO_TICKS = 205
 WHEEL_DISTANCE = 7.4 #205 - 4.25  # Distance between the two wheels
-ADJUST = 1.0 #0.96    #1.01
+ADJUST = 1.02 #0.96    #1.01
 
 
 if IS_CLONE:
@@ -138,6 +138,7 @@ def drive_speed(inches, speed, accel=False):  # Drives an exact distance in inch
     max_sum = 0
     total_time = 0
     number_times = 0
+    error = 0
     last_time = seconds()
     right = False
     if inches < 0:

@@ -142,7 +142,7 @@ def start():
         msleep(2500)
     else:
         msleep(2000)
-    shut_down_in(119)
+    shut_down_in(119.75)
     c.startTime = seconds()
     display("NOTE: {}\t{}".format(seconds(), c.startTime))
     u.move_servo(c.SERVO_JOINT, c.JOINT_TUCKED)
@@ -153,20 +153,24 @@ def leave_startbox():
     display("\nFunction: leave_startbox\n")
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
     x.drive_condition(80, 80, u.on_black_front, False)
-    x.drive_speed(-4, 50)
+    x.drive_speed(-4, 60)
     if c.IS_CLONE:
         x.rotate(-92, 70)
     else:
         x.rotate(-96, 70)
     x.drive_speed(-34, 100)
     x.drive_condition(80, 80, u.on_black_front, False)
+    x.drive_speed(1, 80)
     x.rotate(92, 60)
-    x.drive_speed(-7, 80)
+    x.drive_speed(-7, 85)
 
 
 def drive_till_bump():
     display("\nFunction: drive_till_bump\n")
-    x.drive_speed(42, 100, True)
+    if c.IS_CLONE:
+        x.drive_speed(41, 100, True)
+    else:
+        x.drive_speed(42, 100, True)
 
 
 def get_bin():
@@ -175,11 +179,14 @@ def get_bin():
     if c.IS_CLONE:
         x.rotate(-86, 50)
     else:
-        x.rotate(-86, 50)
+        x.rotate(-90, 50)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
     u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
     msleep(250)
-    x.drive_speed(12, 70)
+    if c.IS_CLONE:
+        x.drive_speed(12, 70)
+    else:
+        x.drive_speed(10, 70)
     u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
     u.move_bin(c.ARM_SWING, 5)
     u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL, 5)
@@ -187,8 +194,8 @@ def get_bin():
     u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE, 5)
     # x.drive_speed(-20, 100)
 
-    x.drive_speed(-10, 100)
-    x.drive_speed(-10, 50)
+    x.drive_speed(-15, 100)
+    x.drive_speed(-6, 50)
 
     u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_OUT, 100)
     x.pivot_right(30,75)
@@ -200,11 +207,11 @@ def go_to_spinner():
     display("\nFunction: go_to_spinner\n")
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED, 5)
     if c.IS_CLONE:
-        x.drive_speed(10, 100)
+        x.drive_speed(8, 100)
     else:
         x.drive_speed(11, 100)
     if c.IS_CLONE:
-        x.pivot_left(90, 70)
+        x.pivot_left(-90, 70)
     else:
         x.pivot_left(-88, 70)
     x.drive_speed(22, -100, True)
@@ -249,7 +256,6 @@ def go_to_ramp():
     x.pivot_right(-90, 60)
     u.move_servo(c.SERVO_JOINT, c.JOINT_MID)
 
-
 def go_up_ramp():
     display("\nFunction: go_up_ramp\n")
     u.move_bin(c.ARM_SWING)
@@ -258,9 +264,9 @@ def go_up_ramp():
     x.drive_speed(5, 100)
     while gyro_y() < 100 or seconds() < start_time + 2:
         if u.on_black_front():
-            x.drive_forever(70, 100)
+            x.drive_forever(50, 100)
         else:
-            x.drive_forever(100, 70)
+            x.drive_forever(100, 50)
         msleep(10)
     x.drive_speed(8, 100)
     u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
@@ -285,6 +291,49 @@ def go_up_ramp():
     print("5")
     u.move_bin(c.ARM_ALL_UP)
     msleep(500)
+def go_up_ramp2():
+    display("\nFunction: go_up_ramp\n")
+    u.move_bin(c.ARM_SWING)
+    x.drive_speed(12, 100)
+    start_time = seconds()
+    x.drive_speed(5, 100)
+    while gyro_y() < 100 or seconds() < start_time + 2:
+        if u.on_black_front():
+            x.drive_forever(70, 100)
+        else:
+            x.drive_forever(100, 70)
+        msleep(10)
+    x.freeze_motors()
+    u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
+    if c.IS_CLONE:
+        x.drive_speed(5, 100)
+        u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_ET)
+        x.pivot_right_condition(-30, u.lost_ramp, False)
+        x.pivot_left_condition(-30, u.on_black_back, False)
+        x.linefollow_distance(9)
+
+    if not c.IS_CLONE:
+        x.drive_speed(8, 100)
+        # u.wait_for_button()
+        print("1")
+        x.pivot_left_condition(30, u.on_black_front, False)
+
+        # u.wait_for_button()
+        print("2")
+        # if u.on_black_back():
+        x.pivot_right_condition(30, u.on_black_back)
+            # x.pivot_right(35, 30)
+
+        # u.wait_for_button()
+        print("3")
+        x.pivot_right_condition(30, u.on_black_back, False)
+        # u.wait_for_button()
+        print("4")
+        x.pivot_left_condition(30, u.on_black_front, False)
+        # u.wait_for_button()
+        print("5")
+    u.move_bin(c.ARM_ALL_UP)
+    msleep(500)
 
 
 def go_and_score_the_bin():
@@ -293,7 +342,7 @@ def go_and_score_the_bin():
     msleep(500)
     u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_OUT, 100)
     # x.linefollow_distance(28, 50, 70)
-    x.linefollow_distance(28, 50, 70, 5)
+    x.linefollow_distance(20, 50, 70, 5)
     x.pivot_right(-32.5, 50)
 
     # x.drive_speed(-2, 50)

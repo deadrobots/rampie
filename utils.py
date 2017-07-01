@@ -225,3 +225,6 @@ def on_black_back():
 
 def on_black_front():
     return analog(c.FRONT_TOPHAT) > c.THRESHOLD_TOPHAT
+
+def lost_ramp():
+    return analog(c.ET) < c.THRESHOLD_ET
