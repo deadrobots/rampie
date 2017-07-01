@@ -154,16 +154,19 @@ def leave_startbox():
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
     x.drive_condition(80, 80, u.on_black_front, False)
     x.drive_speed(-4, 50)
-    x.rotate(-96, 70)
+    if c.IS_CLONE:
+        x.rotate(-92, 70)
+    else:
+        x.rotate(-96, 70)
     x.drive_speed(-34, 100)
     x.drive_condition(80, 80, u.on_black_front, False)
     x.rotate(92, 60)
-    x.drive_speed(-6, 80)
+    x.drive_speed(-7, 80)
 
 
 def drive_till_bump():
     display("\nFunction: drive_till_bump\n")
-    x.drive_speed(41, 100, True)
+    x.drive_speed(42, 100, True)
 
 
 def get_bin():
@@ -182,7 +185,11 @@ def get_bin():
     u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL, 5)
     u.move_bin(c.ARM_APPROACH, 5)
     u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE, 5)
-    x.drive_speed(-20, 100)
+    # x.drive_speed(-20, 100)
+
+    x.drive_speed(-10, 100)
+    x.drive_speed(-10, 50)
+
     u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_OUT, 100)
     x.pivot_right(30,75)
     x.pivot_right(-30, 75)
@@ -193,26 +200,29 @@ def go_to_spinner():
     display("\nFunction: go_to_spinner\n")
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED, 5)
     if c.IS_CLONE:
-        x.drive_speed(10, 100)   #was 50
+        x.drive_speed(10, 100)
     else:
-        x.drive_speed(11, 70)
-    x.pivot_left(-90, 70)
+        x.drive_speed(11, 100)
+    if c.IS_CLONE:
+        x.pivot_left(90, 70)
+    else:
+        x.pivot_left(-88, 70)
     x.drive_speed(22, -100, True)
     x.pivot_left(-32, 50)
-    x.drive_speed(-11, 60)
+    x.drive_speed(-11, 80)
     x.pivot_right(-32, 50)
-    x.drive_speed(-3, 50)
+    x.drive_speed(-3, 70)
     x.drive_condition(50, 50, u.on_black_front, False)
     if c.IS_CLONE:
-        x.rotate(90, 30)
+        x.rotate(90, 35)
     else:
-        x.rotate(98, 30)
+        x.rotate(98, 35)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_TUCKED)
     u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL)
     x.drive_condition(80, 80, u.on_black_front, False)
     x.drive_condition(50, 50, u.on_black_front, True)
     x.rotate_spinner(.25, 80)
-    x.drive_speed(5,50)
+    x.drive_speed(5, 60)
     u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
     x.rotate_spinner(4, -70)
     x.rotate_to_safe(50)
@@ -234,8 +244,8 @@ def go_to_ramp():
     u.move_bin(c.ARM_TUCKED, 5)
     msleep(100)
     x.drive_speed(-7, 100)
-    x.drive_speed(-6, 70)
-    x.drive_speed(2, 70)
+    x.drive_speed(-6, 75)
+    x.drive_speed(2, 75)
     x.pivot_right(-90, 60)
     u.move_servo(c.SERVO_JOINT, c.JOINT_MID)
 
@@ -254,14 +264,25 @@ def go_up_ramp():
         msleep(10)
     x.drive_speed(8, 100)
     u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
+
+    # u.wait_for_button()
+    print("1")
     x.pivot_left_condition(30, u.on_black_front, False)
 
+    # u.wait_for_button()
+    print("2")
     # if u.on_black_back():
     x.pivot_right_condition(30, u.on_black_back)
         # x.pivot_right(35, 30)
 
+    # u.wait_for_button()
+    print("3")
     x.pivot_right_condition(30, u.on_black_back, False)
+    # u.wait_for_button()
+    print("4")
     x.pivot_left_condition(30, u.on_black_front, False)
+    # u.wait_for_button()
+    print("5")
     u.move_bin(c.ARM_ALL_UP)
     msleep(500)
 
