@@ -101,6 +101,16 @@ def init():
 
 def self_test():
     display("\nFunction: self_test\n")
+    display("Click left button to use botguy hitter else hit right")
+    while not right_button() and not left_button():
+        pass
+    if right_button():
+        c.HIT_BOTGUY = False
+        display("wont hit botguy")
+    elif left_button():
+        c.HIT_BOTGUY = True
+        display("will hit botguy")
+    display("DONE SETTING")
     if u.on_black_front() or u.on_black_back():
         display("Something is wrong with the tophats!")
         display("LTOPHAT: {}\tRTOPHAT: {}".format(u.on_black_front(), u.on_black_back()))
@@ -132,6 +142,7 @@ def self_test():
     x.rotate(15,60)
     msleep(1000)
     x.rotate(-15,60)
+
     display("DONE")
 
 
@@ -194,13 +205,13 @@ def get_bin():
     u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE, 5)
     # x.drive_speed(-20, 100)
 
-    x.drive_speed(-15, 100)
-    x.drive_speed(-6, 50)
-
-    u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_OUT, 100)
-    x.pivot_right(30,75)
-    x.pivot_right(-30, 75)
-    u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_IN, 100)
+    x.drive_speed(-16, 100)
+    x.drive_speed(-4, 50)
+    if c.HIT_BOTGUY:
+        u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_OUT, 100)
+        x.pivot_right(30,75)
+        x.pivot_right(-30, 75)
+        u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_IN, 100)
 
 
 def go_to_spinner():

@@ -72,3 +72,5 @@ WHEELS_UP = 850
 
 LOGFILE = "" # Leave empty
 ROBOT_NAME = "Rampy"
+
+HIT_BOTGUY = False
