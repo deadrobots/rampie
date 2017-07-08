@@ -251,7 +251,7 @@ def go_to_ramp():
     u.move_servo(c.SERVO_JOINT, c.JOINT_RAMP_ON)
     u.move_servo(c.SERVO_JOINT, c.JOINT_ARM_TILT)
     if c.IS_CLONE:
-        x.rotate(-7, 50)
+        x.rotate(-5, 50)
     else:
         x.rotate(-5, 50)
     x.drive_forever(-50, -50)
@@ -302,6 +302,8 @@ def go_up_ramp():
     print("5")
     u.move_bin(c.ARM_ALL_UP)
     msleep(500)
+
+
 def go_up_ramp2():
     display("\nFunction: go_up_ramp\n")
     u.move_bin(c.ARM_SWING)
@@ -322,8 +324,7 @@ def go_up_ramp2():
         x.pivot_right_condition(-30, u.lost_ramp, False)
         x.pivot_left_condition(-30, u.on_black_back, False)
         x.linefollow_distance(9)
-
-    if not c.IS_CLONE:
+    else:
         x.drive_speed(8, 100)
         # u.wait_for_button()
         print("1")
