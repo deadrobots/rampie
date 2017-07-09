@@ -190,7 +190,7 @@ def get_bin():
     if c.IS_CLONE:
         x.rotate(-86, 50)
     else:
-        x.rotate(-90, 50)
+        x.rotate(-86, 50)
     u.move_servo(c.SERVO_BIN_ARM, c.ARM_APPROACH)
     u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
     msleep(250)
@@ -353,7 +353,7 @@ def go_and_score_the_bin():
     msleep(500)
     u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_OUT, 100)
     # x.linefollow_distance(28, 50, 70)
-    x.linefollow_distance(20, 50, 70, 5)
+    x.linefollow_distance(21, 50, 70, 5)
     x.pivot_right(-32.5, 50)
 
     # x.drive_speed(-2, 50)
