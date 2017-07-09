@@ -199,10 +199,7 @@ def get_bin():
     else:
         x.drive_speed(10, 70)
     u.move_servo(c.SERVO_JOINT, c.JOINT_SWING)
-    if c.IS_CLONE:
-        u.move_bin(c.ARM_DRIVE,5)
-    else:
-        u.move_bin(c.ARM_SWING, 5)
+    u.move_bin(c.ARM_SWING, 5)
     u.move_servo(c.SERVO_JOINT, c.JOINT_PARALLEL, 5)
     u.move_bin(c.ARM_APPROACH, 5)
     u.move_servo(c.SERVO_JOINT, c.JOINT_ROTATE, 5)
@@ -215,7 +212,7 @@ def get_bin():
         x.pivot_right(30,75)
         x.pivot_right(-30, 75)
         u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_IN, 100)
-    u.move_bin(c.ARM_SPINNER_TEST)
+
 
 def go_to_spinner():
     display("\nFunction: go_to_spinner\n")
@@ -270,28 +267,18 @@ def go_to_ramp():
     x.pivot_right(-90, 60)
     u.move_servo(c.SERVO_JOINT, c.JOINT_MID)
 
-
 def go_up_ramp():
     display("\nFunction: go_up_ramp\n")
     u.move_bin(c.ARM_SWING)
     x.drive_speed(12, 100)
     start_time = seconds()
     x.drive_speed(5, 100)
-
-    if c.IS_CLONE:
-        while gyro_y() < 100 or seconds() < start_time + 2:
-            if u.on_black_front():
-                x.drive_forever(50, 100)
-            else:
-                x.drive_forever(100, 70)
-            msleep(10)
-    else:
-        while gyro_y() < 100 or seconds() < start_time + 2:
-            if u.on_black_front():
-                x.drive_forever(50, 100)
-            else:
-                x.drive_forever(100, 50)
-            msleep(10)
+    while gyro_y() < 100 or seconds() < start_time + 2:
+        if u.on_black_front():
+            x.drive_forever(50, 100)
+        else:
+            x.drive_forever(100, 50)
+        msleep(10)
     x.drive_speed(8, 100)
     u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
 
@@ -313,7 +300,49 @@ def go_up_ramp():
     x.pivot_left_condition(30, u.on_black_front, False)
     # u.wait_for_button()
     print("5")
+    u.move_bin(c.ARM_ALL_UP)
+    msleep(500)
+def go_up_ramp2():
+    display("\nFunction: go_up_ramp\n")
+    u.move_bin(c.ARM_SWING)
+    x.drive_speed(12, 100)
+    start_time = seconds()
+    x.drive_speed(5, 100)
+    while gyro_y() < 100 or seconds() < start_time + 2:
+        if u.on_black_front():
+            x.drive_forever(70, 100)
+        else:
+            x.drive_forever(100, 70)
+        msleep(10)
+    x.freeze_motors()
+    u.move_servo(c.SERVO_JOINT, c.JOINT_GROUND)
+    if c.IS_CLONE:
+        x.drive_speed(5, 100)
+        u.move_servo(c.SERVO_BOT_GUY_HITTER, c.HITTER_ET)
+        x.pivot_right_condition(-30, u.lost_ramp, False)
+        x.pivot_left_condition(-30, u.on_black_back, False)
+        x.linefollow_distance(9)
 
+    if not c.IS_CLONE:
+        x.drive_speed(8, 100)
+        # u.wait_for_button()
+        print("1")
+        x.pivot_left_condition(30, u.on_black_front, False)
+
+        # u.wait_for_button()
+        print("2")
+        # if u.on_black_back():
+        x.pivot_right_condition(30, u.on_black_back)
+            # x.pivot_right(35, 30)
+
+        # u.wait_for_button()
+        print("3")
+        x.pivot_right_condition(30, u.on_black_back, False)
+        # u.wait_for_button()
+        print("4")
+        x.pivot_left_condition(30, u.on_black_front, False)
+        # u.wait_for_button()
+        print("5")
     u.move_bin(c.ARM_ALL_UP)
     msleep(500)
 

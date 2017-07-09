@@ -10,7 +10,7 @@ def main():
     # act.test_ramp()
     # shutdown()
 
-    display("Checking")
+    display("Checking123")
     act.init()
     act.self_test()
     act.start()
